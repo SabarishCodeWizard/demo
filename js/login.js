@@ -34,7 +34,7 @@
                 // Simulate API call delay
                 setTimeout(() => {
                     // Obfuscated check using base64 to prevent casual inspection
-                    if (btoa(username) === 'U1NKU05Z' && btoa(password) === 'MjcxODE1') {
+                    if (btoa(username) === 'YWRtaW4=' && btoa(password) === 'MTIzNA==') {
                         // Successful login
                         localStorage.setItem('isAuthenticated', 'true');
                         localStorage.setItem('username', username);
