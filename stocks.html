@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Stocks - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/invoice-history.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <style>
+        .table-responsive { margin-top: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f8f9fa; font-weight: 600; }
+        .stock-positive { color: #2e7d32; font-weight: bold; }
+        .stock-negative { color: #c62828; font-weight: bold; }
+        .stock-zero { color: #757575; }
+        
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+            max-height: 98vh;
+            width: 98vw;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+        }
+        .close-modal {
+            color: #e53935; /* red styling */
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            /* remove float and margins */
+        }
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu"><i class="fas fa-bars"></i></button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="overview.html" class="nav-btn"><i class="fas fa-chart-pie"></i> Overview</a>
+                <a href="revenue.html" class="nav-btn"><i class="fas fa-chart-line"></i> Revenue Tracking</a>
+                <a href="shortcut.html" class="nav-btn"><i class="fas fa-bolt"></i> Product Shortcuts</a>
+                <a href="stocks.html" class="nav-btn active"><i class="fas fa-boxes"></i> Available Stocks</a>
+                <a href="expenses.html" class="nav-btn"><i class="fas fa-money-bill-wave"></i> Other Expenses</a>
+            </div>
+        </div>
+        <div class="main-content-wrapper">
+            <div class="invoice-history-container" style="margin-bottom: 20px;">
+                <h2>Financial Summary</h2>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
+                    <div style="flex: 1; min-width: 200px; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #1565c0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <h4 style="margin: 0 0 10px 0; color: #555; font-size: 0.95em;">Total Sales</h4>
+                        <div id="totalSalesRevenue" style="font-size: 1.5em; font-weight: bold; color: #1565c0;">₹0.00</div>
+                        <div style="font-size: 0.8em; color: #777; margin-top: 5px;">Total value of all sales</div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #f39c12; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <h4 style="margin: 0 0 10px 0; color: #555; font-size: 0.95em;">Total Purchases</h4>
+                        <div id="totalPurchaseCostsUI" style="font-size: 1.5em; font-weight: bold; color: #f39c12;">₹0.00</div>
+                        <div style="font-size: 0.8em; color: #777; margin-top: 5px;">Total value of all purchases</div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #2e7d32; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <h4 style="margin: 0 0 10px 0; color: #555; font-size: 0.95em;">Cash Received</h4>
+                        <div id="cashCollectedRevenue" style="font-size: 1.5em; font-weight: bold; color: #2e7d32;">₹0.00</div>
+                        <div style="font-size: 0.8em; color: #777; margin-top: 5px;">Money collected from sales</div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #d32f2f; box-shadow: 0 2px 5px rgba(0,0,0,0.05);" id="netProfitLossCard">
+                        <h4 style="margin: 0 0 10px 0; color: #555; font-size: 0.95em;">Net Profit / Loss</h4>
+                        <div id="netProfitLoss" style="font-size: 1.5em; font-weight: bold; color: #d32f2f;">₹0.00</div>
+                        <div style="font-size: 0.8em; color: #777; margin-top: 5px;">Total Sales minus Total Purchases</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-history-container">
+                <h2>Available Stocks</h2>
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <input type="text" id="searchInput" placeholder="Search by Product Description">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="stocksTable">
+                        <thead>
+                            <tr>
+                                <th>Product Description</th>
+                                <th>Opening Stock</th>
+                                <th>Total Purchased Qty</th>
+                                <th>Total Sold Qty</th>
+                                <th>Available Stock</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stocksList">
+                            <tr><td colspan="4" style="text-align: center;">Loading stocks...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock Details Modal -->
+    <div id="stockDetailsModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 900px; width: 90%;">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalProductTitle" style="margin-top: 0;">Product Details</h2>
+            
+    <div class="modal-flex">
+        <!-- Purchase History -->
+        <div class="modal-section">
+            <h3 style="color: #2e7d32; border-bottom: 2px solid #2e7d32; padding-bottom: 5px;">Purchase History</h3>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table style="width: 100%; font-size: 0.9em; margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Invoice No</th>
+                            <th>Supplier</th>
+                            <th>Qty</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purchaseHistoryBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Sales History -->
+        <div class="modal-section">
+            <h3 style="color: #1565c0; border-bottom: 2px solid #1565c0; padding-bottom: 5px;">Sales History</h3>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table style="width: 100%; font-size: 0.9em; margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Invoice No</th>
+                            <th>Customer</th>
+                            <th>Qty</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesHistoryBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/stocks.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
+
+

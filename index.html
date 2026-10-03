@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('css/image.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.9) 100%);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.5);
+            text-align: center;
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .dashboard-container h1 {
+            color: #1e3c72;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .dash-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dash-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border-color: #2a5298;
+        }
+
+        .dash-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .dash-card i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #2a5298;
+        }
+        
+        .dash-card.disabled i {
+            color: #7f8c8d;
+        }
+
+        .dash-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .dash-card p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        .logout-btn {
+            margin-top: 40px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+<link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <p style="color: #666; margin-bottom: 30px; font-size: 1.1rem;"><b>Santhamani Textiles</b></p>
+        
+        <div class="card-grid">
+            <a href="purchase.html" class="dash-card">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Purchase Bill</h3>
+                <p>Manage purchase entries</p>
+            </a>
+            
+            <a href="sales.html" class="dash-card">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h3>Sales Bill</h3>
+                <p>Create and manage customer sales invoices</p>
+            </a>
+            
+            <a href="overview.html" class="dash-card">
+                <i class="fas fa-chart-pie"></i>
+                <h3>Overview</h3>
+                <p>View stocks, revenue, and expenses</p>
+            </a>
+        </div>
+        
+    <!-- Authentication check -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const loginTime = localStorage.getItem('loginTime');
+
+            if (!isAuthenticated || isAuthenticated !== 'true') {
+                window.location.href='login.html';
+                return;
+            }
+
+            if (loginTime) {
+                const loginDate = new Date(loginTime);
+                const currentDate = new Date();
+                const hoursDiff = (currentDate - loginDate) / (1000 * 60 * 60);
+
+                if (hoursDiff > 24) {
+                    localStorage.clear();
+                    window.location.href='login.html';
+                }
+            }
+        });
+    </script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
+
+

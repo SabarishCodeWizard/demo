@@ -1,0 +1,921 @@
+/* --- 1. CSS Variables & Global Reset (Adopted from Recycle Bin) --- */
+:root {
+    /* Color Palette */
+    --primary-color: #007bff;
+    /* Blue for branding/primary action */
+    --primary-hover: #0056b3;
+    --secondary-color: #6c757d;
+    /* Gray for secondary elements/neutral */
+    --success-color: #28a745;
+    /* Green for success/restore */
+    --danger-color: #dc3545;
+    /* Red for delete/warning */
+    --bg-light: #f8f9fa;
+    /* Very light gray background */
+    --bg-white: #ffffff;
+    /* White for content areas */
+    --text-dark: #343a40;
+    /* Dark text */
+    --border-light: #dee2e6;
+    /* Light border color */
+    --shadow-light: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    --purple-color: #6f42c1;
+
+    /* Typography */
+    --font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    /* Spacing */
+    --padding-sm: 8px;
+    --padding-md: 15px;
+    --padding-lg: 20px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* --- 2. Main Layout and Structure (Sidebar/Main Content) --- */
+.container {
+    display: flex;
+    /* min-height: 100vh; - Removed for fixed layout */
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- 3. Sidebar (Controls) - NOW FIXED --- */
+.controls {
+    width: 250px;
+    background-color: var(--text-dark);
+    /* Dark background from reference */
+    color: var(--bg-white);
+    padding: var(--padding-lg);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    /* Prevent sidebar from shrinking */
+    
+    /* === FIX: Fixed Position === */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Allows the sidebar content to scroll if it exceeds screen height */
+    z-index: 1000;
+    /* =========================== */
+}
+
+.bill-system-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.brand-name {
+    display: block;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 5px;
+}
+
+.system-name {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--bg-light);
+    letter-spacing: 1px;
+}
+
+/* Nav Buttons Styling (Match Reference Style) */
+.dashboard,
+.logout-btn,
+.view-history-btn {
+    display: flex; /* Changed from block to flex for icon alignment */
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--bg-white);
+    background-color: var(--text-dark);
+    border: none;
+    text-align: left; /* Changed from center to left for consistent sidebar buttons */
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+    font-weight: 600;
+    margin-bottom: 10px;
+    /* Separates the links */
+}
+
+.logout-btn {
+    background-color: var(--danger-color);
+    margin-top: 20px;
+    justify-content: center; /* Center content in logout button */
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+.dashboard {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+}
+
+.dashboard:hover {
+    background-color: #e2e6ea;
+}
+
+.view-history-btn:hover:not(.active) {
+    background-color: #5a6268;
+}
+
+.view-history-btn.active {
+    background-color: var(--primary-color);
+}
+
+.view-history-btn.active:hover {
+    background-color: var(--primary-hover);
+}
+
+/* === NEW CLASS: Main Content Area Wrapper === */
+.main-content-wrapper {
+    /* Compensation for fixed sidebar width */
+    margin-left: 250px; 
+    flex-grow: 1; /* Takes up the remaining horizontal space */
+    min-height: 100vh; /* Ensures the wrapper covers the full viewport height */
+}
+/* =========================================== */
+
+
+/* --- 4. Main Content Area --- */
+.shortcut-management {
+    /* flex-grow: 1; - Removed because wrapper handles flex now */
+    padding: 30px;
+    background-color: var(--bg-light); /* Changed back to bg-light to match other pages' main area */
+    position: relative;
+    display: flex; /* Added flex properties to keep children contained vertically */
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* --- 5. Shortcut Header & Management Sections --- */
+.shortcut-header {
+    display: flex;
+    flex-direction: column; /* Changed to column for better stacked title/subtitle */
+    align-items: flex-start;
+    border-bottom: 2px solid var(--text-dark);
+    /* Use primary color for main page header */
+    padding-bottom: 20px;
+    margin-bottom: 0;
+}
+
+.shortcut-header h2 {
+    color: var(--primary-color); /* Changed color for consistency */
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.shortcut-header p {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    margin: 5px 0 0 0;
+}
+
+/* --- 6. Shortcut Form (Card Style) --- */
+.shortcut-form,
+.shortcuts-list {
+    background: var(--bg-white);
+    padding: var(--padding-lg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    margin-bottom: 0; /* Margin should be handled by gap in parent .shortcut-management */
+    border: 2px solid var(--border-light);
+    border-top: 5px solid var(--success-color);
+    /* Highlight form card */
+
+}
+
+.shortcut-form h3,
+.shortcuts-list h3 {
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+    font-size: 1.2rem;
+}
+
+.form-row {
+    display: flex;
+    gap: var(--padding-md);
+    align-items: flex-end;
+}
+
+.form-group {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+}
+
+input[type="text"],
+input[type="number"] {
+    padding: 10px 12px;
+    /* Slightly larger padding */
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color); /* Changed to Primary for consistency with system actions */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+}
+
+.btn-processing {
+    background-color: var(--secondary-color);
+    pointer-events: none;
+}
+
+.btn-success {
+    background-color: var(--success-color) !important;
+}
+
+/* --- 7. Shortcuts List & Table (Card Style) --- */
+.shortcuts-list {
+    border-top: 5px solid var(--secondary-color);
+    /* Secondary color for list card */
+}
+
+.search-box {
+    position: relative;
+    margin-bottom: var(--padding-md);
+}
+
+.search-box input {
+    padding-left: 40px;
+    background-color: var(--bg-light);
+    /* Highlight search input */
+    border: 1px solid var(--border-light);
+}
+
+.search-box .fas {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+#shortcutsTable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 0.95rem;
+}
+
+#shortcutsTable th,
+#shortcutsTable td {
+    padding: 12px var(--padding-sm);
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+
+#shortcutsTable th {
+    background-color: var(--purple-color);
+    font-weight: 700;
+    color: var(--bg-white);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+#shortcutsTable tbody tr:hover {
+    background-color: #fcfcfd;
+}
+
+
+#shortcutsTable th:nth-child(3),
+#shortcutsTable td:nth-child(3) {
+    width: 15%;
+}
+
+#shortcutsTable th:nth-child(4),
+#shortcutsTable td:nth-child(4) {
+    width: 25%;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-retry {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    /* Warning color */
+    color: var(--text-dark);
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-retry {
+    background-color: var(--primary-color);
+    color: white;
+    margin-top: 20px;
+    padding: 10px 20px;
+}
+
+/* Empty/Error State */
+#shortcutsTableBody tr td[colspan="3"] {
+    border-bottom: none !important;
+    color: var(--secondary-color);
+    padding: 40px 20px;
+}
+
+/* --- 8. Modal Styling (Adopted from Recycle Bin) --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background-color: var(--bg-white);
+    margin: 10% auto;
+    padding: var(--padding-lg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    max-width: 450px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: var(--padding-md);
+}
+
+.modal-header h3 {
+    color: var(--primary-color);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--secondary-color);
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.close-modal:hover {
+    color: var(--danger-color);
+}
+
+.modal-footer {
+    padding-top: var(--padding-md);
+    border-top: 1px solid var(--border-light);
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* --- 9. Loading and Toast Styles (Adopted from Recycle Bin) --- */
+/* (Styles for .loading-overlay, .professional-spinner, .toast-notification, etc., are copied directly
+    from the bottom sections of your recycle-bin.css as they are shared utility styles) */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.professional-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+.spinner-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.spinner-subtext {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.skeleton-loader {
+    background: #f0f0f0;
+    background-image: linear-gradient(to right, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%);
+    background-repeat: no-repeat;
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+}
+
+.skeleton-table-row {
+    height: 30px;
+    /* Approximate height of a table row */
+    width: 90%;
+    margin: 5px 0;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -800px 0;
+    }
+
+    100% {
+        background-position: 800px 0;
+    }
+}
+
+/* Toast Notification Styles (Matches recycle-bin) */
+.shortcut-message {
+    /* Overrides the inline styles in JS to ensure consistency */
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    padding: 12px 15px !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    font-weight: 600 !important;
+    z-index: 1500 !important;
+    animation: slideInRight 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    color: white !important;
+}
+
+.shortcut-message-success {
+    background: var(--success-color) !important;
+}
+
+.shortcut-message-error {
+    background: var(--danger-color) !important;
+}
+
+/* Keyframe for toast slide-in/out */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+
+/* --- 10. Responsive Design for Mobile/Small Screens --- */
+
+/* === NEW: Mobile Header Container (Hidden on Desktop) === */
+#mobileHeader {
+    display: none; /* Hidden by default on desktop */
+    width: 100%;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: var(--padding-md) var(--padding-lg);
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* Fixed position on top for mobile */
+    top: 0;
+    left: 0;
+    z-index: 1010;
+}
+
+#menuToggle {
+    background: none;
+    border: none;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* Utility Class for Desktop-only Elements */
+.desktop-only {
+    display: block;
+}
+
+@media (max-width: 992px) {
+
+    /* Show mobile header and hide desktop header */
+    #mobileHeader {
+        display: flex;
+    }
+    .desktop-only {
+        display: none;
+    }
+    .bill-system-header.desktop-only {
+        display: none; /* Explicitly hide the desktop header */
+    }
+
+    /* === MOBILE MENU SLIDE-IN LOGIC === */
+    .controls {
+        /* Fixed for full-screen slide-in */
+        position: fixed !important; 
+        width: 250px !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1005 !important; /* Above main content, below mobileHeader */
+        
+        /* Start off-screen (left-to-right slide) */
+        transform: translateX(-100%); 
+        transition: transform 0.3s ease-out; 
+        
+        /* Add padding-top to account for fixed mobile header */
+        padding-top: 80px !important; 
+        
+        /* reset for overriding previous mobile styles */
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        background-color: var(--text-dark) !important;
+    }
+    
+    /* Class applied by JavaScript to slide menu in */
+    .controls.menu-open {
+        transform: translateX(0) !important;
+    }
+    /* =================================== */
+    
+    /* Content Wrapper adjustments */
+    .main-content-wrapper {
+        margin-left: 0;
+        /* Push content down to account for the fixed mobile header */
+        padding-top: 70px; 
+    }
+
+    /* Full-width links and column stack for buttons in the menu */
+    .controls > a, .controls > button, .nav-buttons > a, .nav-buttons > button, .nav-buttons {
+        flex-grow: 0 !important; 
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .nav-buttons > a {
+        margin-bottom: 10px !important;
+    }
+
+    .logout-btn {
+        margin-top: 10px !important;
+    }
+
+    /* Controls become top navigation */
+    .container {
+        flex-direction: column;
+    }
+
+    /* Controls (Sidebar) becomes a full-width header/nav */
+    .controls {
+        /* Revert to static flow for mobile */
+        position: static; 
+        width: 100%;
+        height: auto;
+        padding: var(--padding-md);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        flex-direction: row;
+        /* Layout links horizontally */
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* Remove compensation margin */
+    .main-content-wrapper {
+        margin-left: 0;
+    }
+
+    .bill-system-header {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        flex-basis: 100%;
+    }
+
+    .system-name {
+        font-size: 0.75rem;
+    }
+
+    /* Navigation buttons alignment: Use flex properties for scrolling nav bar */
+    .dashboard,
+    .view-history-btn {
+        flex-grow: 0;
+        flex-shrink: 0; /* Important for horizontal scrolling */
+        margin-bottom: 5px;
+        font-size: 0.85rem;
+        width: auto;
+        padding: 10px 12px;
+    }
+    
+    /* Wrap all nav links in a container to enforce horizontal scroll if necessary */
+    .controls a, .controls button {
+        margin-bottom: 5px;
+    }
+    
+    .logout-btn {
+        flex-grow: 1;
+        width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Main Content */
+    .shortcut-management {
+        padding: 20px 15px;
+    }
+
+    /* Form and Table Layout */
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Table Actions */
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .btn-edit,
+    .btn-delete {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Modal */
+    .modal-content {
+        margin: 20% 15px;
+    }
+}
+
+@media (max-width: 992px) {
+    /* Fix table scrolling on mobile */
+    .table-container {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    #shortcutsTable {
+        table-layout: auto !important;
+        min-width: 600px !important;
+    }
+    #shortcutsTable th, #shortcutsTable td {
+        white-space: nowrap !important;
+    }
+
+/* === UNIFIED DESKTOP NAVIGATION STYLES === */
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dashboard,
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--bg-white);
+    background-color: var(--text-dark);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-weight: 600;
+}
+
+.dashboard {
+    background-color: var(--primary-color); 
+}
+.dashboard:hover { background-color: var(--primary-hover); }
+
+.nav-btn:hover { background-color: #4a5157; }
+/* ========================================= */
+
+/* === FORCE UNIFIED MOBILE MENU STYLES === */
+    .controls {
+        position: fixed !important; 
+        width: 280px !important; /* Slightly wider for better touch targets */
+        height: 100vh !important; /* Full viewport height */
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1005 !important;
+        transform: translateX(-100%) !important; 
+        transition: transform 0.3s ease-out !important; 
+        padding-top: 90px !important; /* Push down to clear mobile header */
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        padding-bottom: 30px !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        background-color: var(--text-dark) !important;
+        overflow-y: auto !important;
+        display: flex !important;
+        align-items: flex-start !important;
+    }
+    
+    .controls.menu-open {
+        transform: translateX(0) !important;
+    }
+
+    .nav-buttons {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 10px !important;
+    }
+
+    .nav-buttons > a, .nav-buttons > button, .controls > a, .controls > button, .button-group > button {
+        width: 100% !important;
+        flex-grow: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        box-sizing: border-box !important;
+        padding: 12px 15px !important; /* Good touch target padding */
+        font-size: 1rem !important;
+    }
+    
+    .button-group {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+        margin-top: 20px !important;
+    }
+    /* ======================================== */
+
+}

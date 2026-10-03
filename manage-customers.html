@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Customers - Billing System</title>
+    <link rel="stylesheet" href="css/customer-details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        .form-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-primary { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-danger { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="sales.html" class="nav-btn"><i class="fas fa-file-invoice"></i> Sales Bill</a>
+                <a href="invoice-history.html" class="nav-btn">
+                    <i class="fas fa-history"></i> Sales History
+                </a>
+                <a href="manage-customers.html" class="dashboard">
+                    <i class="fas fa-user-plus"></i> Add Customer
+                </a>
+                <a href="customer-details.html" class="nav-btn">
+                    <i class="fas fa-users"></i> Customer Details
+                </a>
+                <a href="recycle-bin.html" class="nav-btn">
+                    <i class="fas fa-trash-restore"></i> Recycle Bin
+                </a>
+            </div>
+        </div>
+        
+        <div class="main-content-wrapper">
+            <div class="customer-details-container">
+                <div class="search-section">
+                    <div class="search-header">
+                        <h2><i class="fas fa-user-plus"></i> Manage Customers</h2>
+                        <p>Add, edit, or delete customers</p>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Add New Customer</h3>
+                    <form id="addCustomerForm">
+                        <div class="form-group">
+                            <label for="newCustomerPhone">Phone Number *</label>
+                            <input type="text" id="newCustomerPhone" required placeholder="10-digit phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="newCustomerName">Customer Name *</label>
+                            <input type="text" id="newCustomerName" required placeholder="Enter customer name">
+                        </div>
+                        <div class="form-group">
+                            <label for="newCustomerAddress">Address</label>
+                            <input type="text" id="newCustomerAddress" placeholder="Enter address">
+                        </div>
+                        <button type="submit" class="btn-primary">Add Customer</button>
+                    </form>
+                </div>
+
+                <div class="customer-table-section">
+                    <div class="table-header">
+                        <h3><i class="fas fa-list"></i> Customer Directory</h3>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="customerTable">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/manage-customers.js"></script>
+</body>
+</html>

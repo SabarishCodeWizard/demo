@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Customer Details - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/customer-details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="sales.html" class="nav-btn"><i class="fas fa-file-invoice"></i> Sales Bill</a>
+                <a href="invoice-history.html" class="nav-btn">
+                    <i class="fas fa-history"></i> Sales History
+                </a>
+                <a href="manage-customers.html" class="nav-btn">
+                    <i class="fas fa-user-plus"></i> Add Customer
+                </a>
+                <a href="customer-details.html" class="dashboard">
+                    <i class="fas fa-users"></i> Customer Details
+                </a>
+                <a href="recycle-bin.html" class="nav-btn">
+                    <i class="fas fa-trash-restore"></i> Recycle Bin
+                </a>
+            </div>
+        </div>
+        <div class="main-content-wrapper">
+            <div class="customer-details-container">
+                <div class="search-section">
+                    <div class="search-header">
+                        <h2><i class="fas fa-users"></i>Sales Customer Details</h2>
+                        <p>Search and manage all customer information</p>
+                    </div>
+                    <div class="search-box">
+                        <div class="search-input-group">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="customerSearch" placeholder="Search by customer name, phone, or address...">
+                            <button id="searchBtn" class="search-btn">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                        <button id="clearSearch" class="clear-btn">
+                            <i class="fas fa-times"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-cards" id="statsCards">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalCustomers">0</h3>
+                            <p>Total Customers</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalInvoices">0</h3>
+                            <p>Total Invoices</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-indian-rupee-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalRevenue">₹0</h3>
+                            <p>Total Amount</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalPaid">₹0</h3>
+                            <p>Total Paid</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalDiscount">₹0</h3>
+                            <p>Total Discount</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingBalance">₹0</h3>
+                            <p>Total Balance</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="customer-table-section">
+                    <div class="table-header">
+                        <h3><i class="fas fa-list"></i> Customer List</h3>
+                        <div class="table-actions">
+                            <button id="exportBtn" class="export-btn">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                            <button id="refreshBtn" class="refresh-btn">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="customerTable">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Total Invoices</th>
+                                    <th>Total Amount</th>
+                                    <th>Amount Paid</th>
+                                    <th>Discount</th>
+                                    <th>Returns</th>
+                                    <th>Balance Due</th>
+                                    <th>WhatsApp Reminder</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerTableBody">
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <div class="no-customers" id="noCustomers">
+                        <div class="no-data-icon">
+                            <i class="fas fa-user-slash"></i>
+                        </div>
+                        <h3>No Customers Found</h3>
+                        <p>Start by creating invoices to see customer data here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/customer-details.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
+
+

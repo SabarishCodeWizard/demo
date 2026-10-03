@@ -1,0 +1,191 @@
+/* expenses.css */
+
+.expense-form-container {
+    background: var(--bg-white, #fff);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.expense-form-container h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--border-light, #eee);
+    padding-bottom: 10px;
+    color: var(--primary-color, #007bff);
+}
+
+.expense-form-container .form-group {
+    margin-bottom: 15px;
+}
+
+.expense-form-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.expense-form-container input,
+.expense-form-container textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--border-light, #ccc);
+    font-family: inherit;
+    resize: vertical;
+}
+
+.expense-form-container .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-action {
+    background-color: var(--success-color, #28a745);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    flex: 1;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-action:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: var(--danger-color, #dc3545);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.summary-cards {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    background-color: var(--bg-white, #fff);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-width: 250px;
+}
+
+.total-card {
+    border-left: 5px solid var(--danger-color, #dc3545);
+}
+
+.summary-icon {
+    font-size: 2rem;
+    color: var(--danger-color, #dc3545);
+}
+
+.summary-details h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--secondary-color, #666);
+}
+
+.summary-details p {
+    margin: 5px 0 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-dark, #333);
+}
+
+#expensesTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#expensesTable th {
+    background-color: var(--primary-color, #007bff);
+    color: var(--bg-white, #ffffff);
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+}
+
+#expensesTable td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-light, #dee2e6);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-edit, .btn-delete {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+}
+
+.btn-edit { background-color: var(--info-color, #17a2b8); }
+.btn-edit:hover { background-color: #138496; }
+.btn-delete { background-color: var(--danger-color, #dc3545); }
+.btn-delete:hover { background-color: #c82333; }
+
+.expenses-layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.expenses-left {
+    flex: 0 0 350px;
+}
+
+.expenses-right {
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 992px) {
+    .expenses-layout {
+        flex-direction: column;
+    }
+    .expenses-left, .expenses-right {
+        flex: 1;
+        width: 100%;
+    }
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+#expensesTable {
+    white-space: nowrap;
+    min-width: 600px; /* Ensure it forces scroll on small screens */
+}

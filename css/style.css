@@ -1,0 +1,1124 @@
+:root {
+    --primary-color: #007bff; /* Blue for branding/primary action */
+    --primary-hover: #0056b3;
+    --secondary-color: #6c757d; /* Gray for secondary elements/neutral */
+    --success-color: #28a745; /* Green for success/paid/save */
+    --danger-color: #dc3545; /* Red for delete/warning/logout */
+    --info-color: #17a2b8; /* Cyan for info/history */
+    --warning-color: #ffc107; /* Yellow for attention/reset */
+    --purple-color: #6f42c1; /* Purple for account/payment method */
+    
+    --bg-light: #f8f9fa; /* Very light gray background */
+    --bg-white: #ffffff; /* White for content areas */
+    --text-dark: hsl(210, 10%, 23%); /* Dark text */
+    --border-light: #dee2e6; /* Light border color */
+    --shadow-light: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    
+    /* Spacing */
+    --padding-sm: 8px;
+    --padding-md: 15px;
+    --padding-lg: 20px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* --- 2. Main Layout and Sidebar (Unified Theme) --- */
+.container {
+    display: flex;
+}
+
+/* === NEW: Mobile Header Container (Hidden on Desktop) === */
+#mobileHeader {
+    display: none; /* Hidden by default on desktop */
+    width: 100%;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: var(--padding-md) var(--padding-lg);
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* Fixed position on top for mobile */
+    top: 0;
+    left: 0;
+    z-index: 1010;
+}
+
+#menuToggle, .btn-logout-mobile {
+    background: none;
+    border: none;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* Utility Class for Desktop-only Elements */
+.desktop-only {
+    display: block;
+}
+
+/* Sidebar Styling - DESKTOP/FIXED */
+.controls {
+    width: 250px;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: var(--padding-lg);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    
+    /* === DESKTOP: Fixed Position === */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; 
+    z-index: 1000;
+    /* =========================== */
+}
+
+.bill-system-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.brand-name {
+    display: block;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 5px;
+}
+
+.system-name {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--bg-light);
+    letter-spacing: 1px;
+}
+
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dashboard,
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--bg-white);
+    background-color: var(--text-dark);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-weight: 600;
+}
+
+.dashboard {
+    background-color: var(--primary-color); 
+}
+.dashboard:hover { background-color: var(--primary-hover); }
+
+.nav-btn:hover { background-color: #4a5157; }
+
+/* Button Group (Generate, Save, Reset) */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+.button-group button, #logoutBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s, transform 0.1s;
+    color: white;
+}
+
+#generatePDF {
+    background-color: var(--info-color); 
+}
+#generatePDF:hover { background-color: #138496; }
+
+#shareWhatsApp {
+    background-color: #25D366; 
+}
+#shareWhatsApp:hover { background-color: #1ebe57; }
+
+#shareStatementWhatsApp {
+    background-color: var(--purple-color);
+}
+#shareStatementWhatsApp:hover { background-color: #5a32a3; }
+
+#saveBill, #saveSupplierBtn, #savePurchaseBillBtn {
+    background-color: var(--primary-color); 
+}
+#saveBill:hover, #saveSupplierBtn:hover, #savePurchaseBillBtn:hover { background-color: var(--primary-hover); }
+
+#resetForm {
+    background-color: var(--warning-color); 
+    color: var(--text-dark);
+}
+#resetForm:hover { background-color: #e0a800; }
+
+#logoutBtn {
+    background-color: var(--danger-color); 
+    margin-top: 10px;
+}
+#logoutBtn:hover { background-color: #c82333; }
+
+.btn-success {
+    background: var(--success-color) !important;
+}
+
+/* Main Content Area Wrapper */
+.main-content-wrapper {
+    /* Compensation for fixed sidebar width on DESKTOP */
+    margin-left: 250px; 
+    flex-grow: 1; 
+    min-height: 100vh; 
+    position: relative; 
+}
+/* =========================================== */
+
+/* --- 3. Invoice Container (Main Content Area) --- */
+.invoice-container {
+    /* flex-grow: 1; -> REMOVED because the main-content-wrapper handles flex now */
+    padding: var(--padding-lg);
+    background-color: var(--bg-white);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 900px; /* Standard invoice width approximation */
+    margin: 20px auto; /* Centers the invoice horizontally within the wrapper */
+    border-radius: 8px;
+}
+
+/* --- 4. Invoice Header --- */
+.invoice-header {
+    display: grid;
+    grid-template-columns: 2.5fr auto 1.5fr; /* Details, Image, Info */
+    gap: 15px;
+    border-bottom: 2px solid var(--text-dark);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.company-details {
+    padding-right: 10px;
+}
+
+.company-details h2 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.company-details p {
+    font-size: 0.8rem;
+    margin: 2px 0;
+    color: var(--secondary-color);
+}
+
+.invoice-header img {
+    max-width: 180px;
+    height: auto;
+    justify-self: center;
+    align-self: center;
+}
+
+.invoice-title {
+    text-align: right;
+}
+
+.invoice-title h2 {
+    font-size: 2.2rem;
+    color: var(--danger-color);
+    margin-bottom: 10px;
+}
+
+.invoice-number, .invoice-date {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.invoice-number label, .invoice-date label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.invoice-number input, .invoice-date input {
+    max-width: 150px;
+    padding: 5px 8px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+}
+
+/* Invoice Number Suggestions */
+.invoice-number-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.suggestion-item {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.suggestion-label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+#nextInvoiceNo {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.btn-apply-suggestion {
+    background: var(--success-color);
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-apply-suggestion:hover { background-color: #1e7e34; }
+
+
+/* --- 5. Billing & Customer Info --- */
+.billing-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+    border: 2px solid var(--border-light);
+    border-radius: 6px;
+    padding: var(--padding-md);
+}
+
+.bill-to h3 {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    border-bottom: 1px dashed var(--border-light);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.form-group label {
+    min-width: 80px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+}
+
+.form-group input {
+    flex-grow: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+/* Customer Balance Info */
+.customer-balance-info {
+    margin-bottom: 20px;
+    border: 1px solid #d4edda;
+    background-color: #f8fcf8;
+    border-radius: 6px;
+    padding: var(--padding-md);
+    box-shadow: var(--shadow-light);
+}
+
+.balance-summary h3 {
+    font-size: 1.1rem;
+    color: var(--success-color);
+    border-bottom: 1px dashed #d4edda;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.balance-details {
+    display: flex;
+    gap: 30px;
+}
+
+.balance-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.balance-label {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-bottom: 3px;
+}
+
+.balance-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* --- 6. Product Table --- */
+.product-table-container {
+    margin-bottom: 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+    border: 2px solid var(--border-light);
+}
+
+#productTable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    min-width: 700px;
+}
+
+#productTable th, #productTable td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+#productTable th {
+    background-color: rgb(56, 52, 52);
+    font-weight: 700;
+    color: var(--bg-white);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+#productTable td input {
+    width: 90%;
+    padding: 6px 8px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 2px solid var(--border-light);
+}
+.product-description-container input {
+    text-align: left;
+    width: 100%;
+}
+
+.amount {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Column Widths */
+#productTable th:nth-child(1), #productTable td:nth-child(1) { width: 5%; } /* S.No */
+#productTable th:nth-child(2), #productTable td:nth-child(2) { width: 45%; text-align: left; } .btn-logout-top {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-logout-top:hover {
+    background-color: #c82333;
+}
+
+/* Base Form Section */
+#productTable th:nth-child(3), #productTable td:nth-child(3) { width: 15%; } /* Qty */
+#productTable th:nth-child(4), #productTable td:nth-child(4) { width: 15%; } /* Rate */
+#productTable th:nth-child(5), #productTable td:nth-child(5) { width: 15%; } /* Amount */
+#productTable th:nth-child(6), #productTable td:nth-child(6) { width: 10%; } /* Action */
+
+#addRow {
+    background-color: var(--success-color);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.2s;
+}
+#addRow:hover { background-color: #1e7e34; }
+
+.remove-row {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+/* --- Auto-Complete Dropdown Styling --- */
+.product-description-container {
+    position: relative;
+}
+
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background-color: var(--bg-white);
+    border: 1px solid var(--primary-color);
+    border-top: none;
+    box-shadow: var(--shadow-light);
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    border-radius: 0 0 4px 4px;
+}
+
+.autocomplete-item {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.1s;
+    text-align: left;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.highlighted {
+    background-color: #e9ecef;
+    color: var(--primary-color);
+}
+
+.autocomplete-item strong {
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.autocomplete-loading, .autocomplete-no-results, .autocomplete-error {
+    padding: 10px;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+/* --- 7. Payment Calculation Section --- */
+.calculation-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.revenue-calculation {
+    text-align: left;
+    padding-right: 20px;
+    color: #555;
+    font-size: 0.9em;
+    flex: 1;
+    border-right: 2px dashed #ddd;
+    margin-right: 20px;
+}
+
+.payment-calculation {
+    width: 100%;
+    max-width: 350px;
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    padding: var(--padding-md);
+    background-color: #f7faff;
+}
+
+.payment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 0.95rem;
+}
+
+.payment-row label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.payment-row span {
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.total {
+    border-top: 1px solid var(--border-light);
+    padding-top: 10px;
+    margin-top: 5px;
+    font-size: 1.1rem;
+}
+
+/* Previous Balance Styling */
+.previous-balance-row {
+    color: var(--danger-color);
+    font-weight: 600;
+}
+.previous-balance-row span {
+    color: var(--danger-color);
+}
+
+
+/* Multiple Payments Styling */
+.multiple-payments-section {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-light);
+}
+
+.multiple-payments-section h4 {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.payment-method-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    background-color: var(--bg-white);
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+}
+
+.payment-method-label {
+    font-weight: 500;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 80px;
+}
+.payment-method-label i {
+    color: var(--primary-color);
+}
+.payment-method-label i.fa-money-bill-wave { color: var(--success-color); }
+.payment-method-label i.fa-mobile-alt { color: var(--primary-color); }
+.payment-method-label i.fa-university { color: var(--purple-color); }
+
+
+.payment-input {
+    width: 120px;
+    padding: 6px 8px;
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    text-align: right;
+}
+
+.total-paid label {
+    color: var(--success-color);
+}
+.total-paid span {
+    color: var(--success-color);
+    font-size: 1rem;
+}
+
+
+/* New Balance Due */
+#balanceDue {
+    color: var(--danger-color);
+    font-size: 1.2rem;
+}
+
+
+/* --- 8. Signature Section --- */
+.signature-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+    font-size: 0.9rem;
+}
+
+.declaration p {
+    margin-bottom: 5px;
+    font-style: italic;
+    color: var(--secondary-color);
+}
+
+.declaration p:first-child {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.customer-signature, .company-signature {
+    text-align: center;
+}
+
+.signature-line {
+    margin-top: 40px;
+    padding-top: 5px;
+    border-top: 1px solid var(--text-dark);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* --- 9. Loading & Utility States --- */
+/* Global/Full-screen Loading (For initialization, full reset, or unrecoverable error) */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+/* Content-specific Loading Overlay (More professional and less intrusive) */
+.content-loading-overlay {
+    position: absolute; /* Relative to .main-content-wrapper */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1500; /* Above invoice content, below global overlay */
+    transition: opacity 0.3s;
+}
+
+.professional-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+.spinner-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.spinner-subtext {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-state {
+    text-align: center;
+    padding: 50px;
+    background-color: var(--bg-white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+}
+
+.btn-retry {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+
+/* --- 10. Responsive Design --- */
+@media (max-width: 992px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    /* Show mobile header and hide desktop header */
+    #mobileHeader {
+        display: flex;
+    }
+    .desktop-only {
+        display: none;
+    }
+    .btn-logout-top {
+        display: none !important;
+    }
+    .bill-system-header.desktop-only {
+        display: none; /* Explicitly hide the desktop header */
+    }
+
+    /* === MOBILE MENU SLIDE-IN LOGIC === */
+    .controls {
+        /* Fixed for full-screen slide-in */
+        position: fixed; 
+        width: 250px;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1005; /* Above main content, below mobileHeader */
+        
+        /* Start off-screen (left-to-right slide) */
+        transform: translateX(-100%); 
+        transition: transform 0.3s ease-out; 
+        
+        /* Add padding-top to account for fixed mobile header */
+        padding-top: 80px; 
+    }
+    
+    /* Class applied by JavaScript to slide menu in */
+    .controls.menu-open {
+        transform: translateX(0);
+    }
+    /* =================================== */
+    
+    /* Content Wrapper adjustments */
+    .main-content-wrapper {
+        margin-left: 0;
+        /* Push content down to account for the fixed mobile header */
+        padding-top: 70px; 
+    }
+
+    /* Full-width links and column stack for buttons in the menu */
+    .controls > a, .controls > button {
+        flex-grow: 0; 
+        width: 100%;
+        padding: 10px 12px;
+        margin: 0;
+    }
+    
+    .button-group {
+        flex-direction: column; 
+        gap: 10px;
+        flex-basis: 100%;
+        margin: 20px 0;
+    }
+    
+    /* General Mobile Layout Cleanup */
+    .invoice-container {
+        margin: 10px;
+    }
+    .invoice-header {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        text-align: center;
+    }
+    .invoice-header img {
+        display: none; 
+    }
+    .company-details, .invoice-title {
+        text-align: center;
+    }
+    .invoice-number, .invoice-date {
+        justify-content: center;
+    }
+    .invoice-number input, .invoice-date input {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+    .billing-info {
+        grid-template-columns: 1fr;
+    }
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .form-group label {
+        margin-bottom: 5px;
+    }
+    .form-group input {
+        width: 100%;
+        max-width: 100%;
+    }
+    .calculation-section {
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+    }
+    .revenue-calculation {
+        border-right: none;
+        padding-right: 0;
+        margin-right: 0;
+        border-bottom: 2px dashed #ddd;
+        padding-bottom: 15px;
+    }
+    .payment-calculation {
+        max-width: 100%;
+    }
+    .signature-section {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .customer-balance-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .balance-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 992px) {
+
+    /* === FORCE UNIFIED MOBILE MENU STYLES === */
+    .controls {
+        position: fixed !important; 
+        width: 280px !important; /* Slightly wider for better touch targets */
+        bottom: 0 !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1005 !important;
+        transform: translateX(-100%) !important; 
+        transition: transform 0.3s ease-out !important; 
+        padding-top: 90px !important; /* Push down to clear mobile header */
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        padding-bottom: 30px !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        background-color: var(--text-dark) !important;
+        overflow-y: auto !important;
+        display: flex !important;
+        align-items: flex-start !important;
+    }
+    
+    .controls.menu-open {
+        transform: translateX(0) !important;
+    }
+
+    .nav-buttons {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 10px !important;
+    }
+
+    .nav-buttons > a, .nav-buttons > button, .controls > a, .controls > button, .button-group > button {
+        width: 100% !important;
+        flex-grow: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        box-sizing: border-box !important;
+        padding: 12px 15px !important; /* Good touch target padding */
+        font-size: 1rem !important;
+    }
+    
+    .button-group {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+        margin-top: 20px !important;
+    }
+    /* ======================================== */
+
+}
+
+/* Toast Notifications */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast-message {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 300px;
+    transform: translateX(120%);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-left: 4px solid var(--primary-color);
+}
+
+.toast-message.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast-message.success { border-left-color: var(--success-color); }
+.toast-message.success i { color: var(--success-color); }
+
+.toast-message.error { border-left-color: var(--danger-color); }
+.toast-message.error i { color: var(--danger-color); }
+
+.toast-message.info { border-left-color: var(--info-color); }
+.toast-message.info i { color: var(--info-color); }
+
+.toast-message.warning { border-left-color: var(--warning-color); }
+.toast-message.warning i { color: var(--warning-color); }
+
+.toast-icon {
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+.toast-content {
+    flex-grow: 1;
+}
+
+.toast-content h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+}
+
+.toast-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    white-space: pre-line;
+}
+
+/* Custom Confirm Modal */
+.custom-confirm-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+.custom-confirm-overlay.show { opacity: 1; }
+
+.custom-confirm-modal {
+    background: var(--bg-white);
+    padding: 25px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: scale(0.95);
+    transition: transform 0.2s ease-out;
+    text-align: center;
+}
+.custom-confirm-overlay.show .custom-confirm-modal { transform: scale(1); }
+
+.custom-confirm-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+.custom-confirm-icon.warning { color: var(--warning-color); }
+.custom-confirm-icon.danger { color: var(--danger-color); }
+
+.custom-confirm-modal h3 {
+    margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;
+}
+.custom-confirm-modal p {
+    color: var(--secondary-color); margin-bottom: 25px; font-size: 0.95rem;
+}
+
+.custom-confirm-actions {
+    display: flex; justify-content: center; gap: 15px;
+}
+.custom-confirm-btn {
+    padding: 10px 20px;
+    border: none; border-radius: 4px;
+    font-weight: 600; cursor: pointer;
+    transition: all 0.2s; font-size: 0.95rem;
+}
+.btn-cancel {
+    background-color: #e9ecef; color: var(--text-dark);
+}
+.btn-cancel:hover { background-color: #dde0e3; }
+.btn-confirm {
+    background-color: var(--danger-color); color: white;
+}
+.btn-confirm:hover { background-color: #c82333; }
+
+.option-card { background: var(--bg-white); border-radius: 12px; padding: 40px; width: 250px; text-align: center; cursor: pointer; box-shadow: var(--shadow-light); transition: transform 0.2s, box-shadow 0.2s; border: 2px solid var(--border-light); }
+.option-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--primary-color); }
+. r e a d o n l y - f i e l d   {   b a c k g r o u n d - c o l o r :   # f 1 f 3 f 5 ;   c u r s o r :   n o t - a l l o w e d ;   o p a c i t y :   0 . 8 ;   }  
+ 
+.readonly-field { background-color: #f1f3f5; cursor: not-allowed; opacity: 0.8; }

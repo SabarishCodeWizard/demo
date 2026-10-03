@@ -1,0 +1,244 @@
+
+/* ========================================= */
+/* UNIFIED SIDEBAR AND MOBILE NAVIGATION CSS */
+/* ========================================= */
+
+/* --- 1. Variables (Fallback) --- */
+:root {
+    --sidebar-bg: #343a40; /* var(--text-dark) */
+    --sidebar-text: #ffffff;
+    --sidebar-primary: #007bff;
+    --sidebar-primary-hover: #0056b3;
+    --sidebar-danger: #dc3545;
+    --sidebar-danger-hover: #c82333;
+}
+
+/* --- 2. Mobile Header (Hidden on Desktop) --- */
+#mobileHeader {
+    display: none;
+    width: 100%;
+    background-color: var(--text-dark, var(--sidebar-bg));
+    color: var(--bg-white, var(--sidebar-text));
+    padding: 15px 20px;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#mobileHeader .bill-system-header {
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-align: left;
+}
+
+#menuToggle {
+    background: none;
+    border: none;
+    color: var(--bg-white, var(--sidebar-text));
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.desktop-only {
+    display: block;
+}
+
+/* --- 3. Desktop Sidebar (.controls) --- */
+.controls {
+    width: 250px !important;
+    background-color: var(--text-dark, var(--sidebar-bg)) !important;
+    color: var(--bg-white, var(--sidebar-text)) !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1) !important;
+    
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    z-index: 1000 !important;
+}
+
+/* Header inside sidebar */
+.controls .bill-system-header {
+    margin-bottom: 30px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding-bottom: 15px !important;
+    text-align: center !important;
+}
+
+.controls .brand-name {
+    display: block !important;
+    color: var(--bg-white, var(--sidebar-text)) !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    margin-bottom: 5px !important;
+}
+
+.controls .system-name {
+    display: block !important;
+    font-size: 0.8rem !important;
+    color: #f8f9fa !important;
+    letter-spacing: 1px !important;
+}
+
+/* --- 4. Navigation Buttons --- */
+.nav-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+.nav-buttons > a,
+.controls > .dashboard,
+.controls > .nav-btn,
+.nav-btn,
+.dashboard {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 15px !important;
+    text-decoration: none !important;
+    color: var(--bg-white, var(--sidebar-text)) !important;
+    background-color: var(--text-dark, var(--sidebar-bg)) !important;
+    border: none !important;
+    text-align: left !important;
+    cursor: pointer !important;
+    font-size: 1rem !important;
+    border-radius: 4px !important;
+    transition: background-color 0.2s !important;
+    font-weight: 600 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+.nav-buttons > a:hover,
+.nav-btn:hover { 
+    background-color: #4a5157 !important; 
+}
+
+.active-nav-item {
+    background-color: var(--primary-color, var(--sidebar-primary)) !important;
+    border-left: 4px solid white !important;
+    padding-left: 11px !important; /* To offset the 4px border so total padding remains 15px */
+}
+
+.active-nav-item:hover {
+    background-color: var(--primary-hover, var(--sidebar-primary-hover)) !important;
+}
+
+.logout-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    padding: 12px 15px !important;
+    border-radius: 4px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    border: none !important;
+    transition: background-color 0.2s !important;
+    color: white !important;
+    background-color: var(--danger-color, var(--sidebar-danger)) !important;
+    margin-top: 20px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    font-size: 1rem !important;
+}
+
+.logout-btn:hover { 
+    background-color: var(--sidebar-danger-hover) !important; 
+}
+
+/* Ensure icons have fixed width for alignment */
+.nav-buttons > a i, 
+.dashboard i, 
+.nav-btn i, 
+.logout-btn i {
+    width: 20px !important;
+    text-align: center !important;
+}
+
+/* Button group for index.html */
+.button-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
+    width: 100% !important;
+}
+.button-group button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    padding: 12px 15px !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    border: none !important;
+    transition: background-color 0.2s !important;
+    width: 100% !important;
+    color: white !important;
+}
+
+/* Main Content Wrapper padding */
+.main-content-wrapper {
+    margin-left: 250px; 
+    flex-grow: 1;
+    min-height: 100vh;
+}
+
+
+/* --- 5. Mobile View (max-width: 992px) --- */
+@media (max-width: 992px) {
+    #mobileHeader {
+        display: flex !important;
+    }
+    .desktop-only {
+        display: none !important;
+    }
+    
+    .controls {
+        position: fixed !important; 
+        width: 280px !important;
+        height: 100vh !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1005 !important;
+        transform: translateX(-100%) !important; 
+        transition: transform 0.3s ease-out !important; 
+        padding-top: 90px !important; 
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        padding-bottom: 30px !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        background-color: var(--text-dark, var(--sidebar-bg)) !important;
+        overflow-y: auto !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.5) !important;
+    }
+    
+    .controls.menu-open {
+        transform: translateX(0) !important;
+    }
+
+    .main-content-wrapper {
+        margin-left: 0 !important;
+        padding-top: 80px !important; 
+    }
+}

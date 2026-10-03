@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+PR Fabrics-win32-x64
+
+# Large files
+*.exe
+*.dmg
+*.deb
+*.rpm
+*.zip
+*.tar.gz
+
+# Electron build files
+dist/
+build/
+out/
+
+# Environment files
+.env
+.env.local
+
+
+# Logs
+dist
+
+
+
+#sabarish

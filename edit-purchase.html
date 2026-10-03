@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Purchase Bill - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>`n<link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="purchase.html" class="dashboard">
+                    <i class="fas fa-shopping-cart"></i> Purchase Bill
+                </a>
+                <a href="purchase-history.html" class="nav-btn">
+                    <i class="fas fa-history"></i> Purchase History
+                </a>
+                <a href="manage-suppliers.html" class="nav-btn">
+                    <i class="fas fa-truck-loading"></i> Add Supplier
+                </a>
+                <a href="supplier-details.html" class="nav-btn">
+                    <i class="fas fa-truck"></i> Supplier Details
+                </a>
+                <a href="purchase-recycle-bin.html" class="nav-btn">
+                    <i class="fas fa-trash-restore"></i> Recycle Bin
+                </a>
+            </div>
+            <div class="button-group">
+                <h2 class="page-title">Edit Purchase Bill</h2>
+                <button id="savePurchaseBillBtn">
+                    <i class="fas fa-file-invoice"></i> Update Purchase Bill
+                </button>
+                <button id="shareAcknowledgementBtn" class="share-btn" style="background-color: #25D366; color: white; margin-top: 10px; width: 100%; border: none; padding: 12px 15px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fas fa-share-alt"></i> Share Acknowledgement
+                </button>
+            </div>
+        </div>
+        <div class="main-content-wrapper">
+            <button id="logoutBtn" class="btn-logout-top">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+            <div id="invoice" class="invoice-container">
+                <div class="invoice-header">
+                    <div class="company-details">
+                        <h2>PURCHASE ENTRY</h2>
+                        <p>Supplier Entry Phase</p>
+                        <div class="invoice-number-suggestions">
+                            <div class="suggestion-item">
+                                <span class="suggestion-label">Last Purchase:</span>
+                                <span class="suggestion-value" id="lastInvoiceNo">-</span>
+                            </div>
+                            <div class="suggestion-item">
+                                <span class="suggestion-label">Suggested Next:</span>
+                                <span class="suggestion-value" id="nextInvoiceNo">-</span>
+                            </div>
+                            <button id="applySuggestion" class="btn-apply-suggestion">
+                                <i class="fas fa-magic"></i> Apply Suggestion
+                            </button>
+                        </div>
+                    </div>
+                    <div class="invoice-title">
+                        <div class="invoice-number">
+                            <label for="invoiceNo">Invoice No:</label>
+                            <input type="text" id="invoiceNo" placeholder="Enter invoice number">
+                        </div>
+                        <div class="invoice-date">
+                            <label for="invoiceDate">Invoice Date:</label>
+                            <input type="date" id="invoiceDate">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="billing-info">
+                    <div class="bill-to">
+                        <div class="form-group">
+                            <label for="supplierPhone">Phone:</label>
+                            <input type="text" id="supplierPhone" placeholder="e.g. 9876543210">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierName">Name:</label>
+                            <input type="text" id="supplierName" placeholder="e.g. Supplier Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierAddress">Address:</label>
+                            <input type="text" id="supplierAddress"
+                                placeholder="e.g. 1/1B,EAST Extn,M.S.NAGAR, TIRUPUR-7">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-table-container">
+                    <table id="productTable">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Product Description</th>
+                                <th>Qty</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <div class="product-description-container">
+                                        <input type="text" class="product-description">
+                                        <div class="autocomplete-dropdown"></div>
+                                    </div>
+                                </td>
+                                <td><input type="number" class="qty" value="0"></td>
+                                <td><input type="number" class="rate" value="0.00"></td>
+                                <td class="amount">0.00</td>
+                                <td><button class="remove-row">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button id="addRow">Add Product</button>
+                </div>
+                <div class="calculation-section">
+                    <div class="payment-calculation">
+                        <div class="payment-row">
+                            <label>Current Bill Subtotal:</label>
+                            <span id="subTotal">0.00</span>
+                        </div>
+                        <div class="payment-row previous-balance-row">
+                            <label>Previous Balance Due:</label>
+                            <span id="previousBalance">0.00</span>
+                        </div>
+                        <div class="payment-row previous-balance-row">
+                            <label>Opening Balance:</label>
+                            <input type="number" id="manualPreviousBalance" value="0" class="payment-input" placeholder="0.00" style="text-align: right;">
+                        </div>
+                        <div class="payment-row previous-balance-row">
+                            <label>Discount Amount:</label>
+                            <input type="number" id="discountAmount" value="0" class="payment-input" placeholder="0.00" style="text-align: right;">
+                        </div>
+                        <div class="payment-row total">
+                            <label>Total Amount Due:</label>
+                            <span id="grandTotal">0.00</span>
+                        </div>
+
+                        <div class="multiple-payments-section">
+                            <h4>Payment Methods</h4>
+
+                            <div class="payment-method-row">
+                                <div class="payment-method-label">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    CASH:
+                                </div>
+                                <input type="number" id="cashPaid" value="0" class="payment-input" placeholder="0.00">
+                            </div>
+
+                            <div class="payment-method-row">
+                                <div class="payment-method-label">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    UPI:
+                                </div>
+                                <input type="number" id="upiPaid" value="0" class="payment-input" placeholder="0.00">
+                            </div>
+
+                            <div class="payment-method-row">
+                                <div class="payment-method-label">
+                                    <i class="fas fa-university"></i>
+                                    ACCOUNT:
+                                </div>
+                                <input type="number" id="accountPaid" value="0" class="payment-input" placeholder="0.00">
+                            </div>
+
+                            <div class="payment-row total-paid">
+                                <label>Total Amount Paid:</label>
+                                <span id="totalAmountPaid">0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="payment-row">
+                            <label>Balance Due:</label>
+                            <span id="balanceDue">0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-area" id="messageArea" style="margin-top: 20px; padding: 10px; border-radius: 5px; display: none;"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/pdf.js"></script>
+    <script src="js/edit-purchase.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
+
+
+

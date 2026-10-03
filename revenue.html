@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Tracking - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <style>
+        .revenue-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .revenue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .revenue-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .revenue-table th, .revenue-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .revenue-table th {
+            background-color: #f4f6f9;
+            color: #333;
+            font-weight: 600;
+        }
+        .revenue-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="overview.html" class="nav-btn"><i class="fas fa-chart-pie"></i> Overview</a>
+                <a href="revenue.html" class="nav-btn active"><i class="fas fa-chart-line"></i> Revenue Tracking</a>
+                <a href="shortcut.html" class="nav-btn"><i class="fas fa-bolt"></i> Product Shortcuts</a>
+                <a href="stocks.html" class="nav-btn"><i class="fas fa-boxes"></i> Available Stocks</a>
+                <a href="expenses.html" class="nav-btn"><i class="fas fa-money-bill-wave"></i> Other Expenses</a>
+            </div>
+        </div>
+        <div class="main-content-wrapper">
+            <div class="revenue-container">
+                <div class="revenue-header">
+                    <h2>Revenue & Profit Tracking</h2>
+                </div>
+                <div class="search-filters" style="margin-bottom: 20px;">
+                    <div class="filter-group" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="date" id="searchDateInput" title="Search by Date" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex-grow: 1; min-width: 150px;">
+                        <input type="text" id="searchNameInput" title="Search by Customer Name" placeholder="Search by Customer Name..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex-grow: 2; min-width: 200px;">
+                        <button id="clearSearchBtn" style="padding: 10px 15px; border-radius: 4px; border: none; background-color: #d9534f; color: white; cursor: pointer; flex-shrink: 0;"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="revenue-table">
+                        <thead>
+                            <tr>
+                                <th>Bill No</th>
+                                <th>Date</th>
+                                <th>Customer Name</th>
+                                <th>Details</th>
+                                <th>Profit Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="revenueTableBody">
+                            <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/revenue.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            if (!isAuthenticated || isAuthenticated !== 'true') {
+                window.location.href='login.html';
+                return;
+            }
+        });
+    </script>
+</body>
+</html>
+
+

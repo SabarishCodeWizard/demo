@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        .overview-management {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .overview-header {
+            margin-bottom: 30px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .dash-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .dash-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border-color: #2a5298;
+        }
+        .dash-card i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #2a5298;
+        }
+        .dash-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+        }
+        .dash-card p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="overview.html" class="nav-btn active"><i class="fas fa-chart-pie"></i> Overview</a>
+                <a href="revenue.html" class="nav-btn"><i class="fas fa-chart-line"></i> Revenue Tracking</a>
+                <a href="shortcut.html" class="nav-btn"><i class="fas fa-bolt"></i> Product Shortcuts</a>
+                <a href="stocks.html" class="nav-btn"><i class="fas fa-boxes"></i> Available Stocks</a>
+                <a href="expenses.html" class="nav-btn"><i class="fas fa-money-bill-wave"></i> Other Expenses</a>
+            </div>
+        </div>
+        <div class="main-content-wrapper">
+            <div class="overview-management">
+                <div class="overview-header">
+                    <h2>Overview & Analytics</h2>
+                    <p>Select an option from the sidebar to view your business analytics.</p>
+                </div>
+                
+        </div>
+    </div>
+
+    <!-- Authentication check -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const loginTime = localStorage.getItem('loginTime');
+
+            if (!isAuthenticated || isAuthenticated !== 'true') {
+                window.location.href='login.html';
+                return;
+            }
+
+            if (loginTime) {
+                const loginDate = new Date(loginTime);
+                const currentDate = new Date();
+                const hoursDiff = (currentDate - loginDate) / (1000 * 60 * 60);
+
+                if (hoursDiff > 24) {
+                    localStorage.clear();
+                    window.location.href='login.html';
+                }
+            }
+            
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const menuPanel = document.getElementById('menuPanel');
+            if (menuToggle && menuPanel) {
+                menuToggle.addEventListener('click', () => {
+                    menuPanel.classList.toggle('menu-open');
+                });
+            }
+        });
+    </script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>

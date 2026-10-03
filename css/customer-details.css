@@ -1,0 +1,1286 @@
+/* --- customer-details.css --- */
+
+/* --- 1. CSS Variables & Global Reset (Unified Theme) --- */
+:root {
+    --primary-color: #007bff; /* Blue for branding/primary action */
+    --primary-hover: #0056b3;
+    --secondary-color: #6c757d; /* Gray for neutral elements */
+    --success-color: #28a745; /* Green for success/paid */
+    --danger-color: #dc3545; /* Red for deletion/critical balance */
+    --info-color: #17a2b8; /* Cyan for info/export */
+    --warning-color: #ffc107; /* Yellow for returns */
+    --bg-light: #f8f9fa; /* Very light gray background */
+    --bg-white: #ffffff; /* White for content areas */
+    --text-dark: #343a40; /* Dark text */
+    --border-light: #dee2e6; /* Light border color */
+    --shadow-light: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --purple-color: #6f42c1;
+
+    /* Spacing */
+    --padding-sm: 8px;
+    --padding-md: 15px;
+    --padding-lg: 20px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* --- 2. Main Layout and Sidebar (Unified Theme) --- */
+.container {
+    display: flex;
+    /* min-height: 100vh; - Removed for fixed layout */
+}
+
+/* Sidebar Styling - NOW FIXED */
+.controls {
+    width: 250px;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: var(--padding-lg);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    
+    /* === FIX: Fixed Position === */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Allows the sidebar content to scroll if it exceeds screen height */
+    z-index: 1000;
+    /* =========================== */
+}
+
+.bill-system-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.brand-name {
+    display: block;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 5px;
+}
+
+.system-name {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--bg-light);
+    letter-spacing: 1px;
+}
+
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dashboard,
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--bg-white);
+    background-color: var(--text-dark);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-weight: 600;
+}
+
+.dashboard {
+    background-color: var(--primary-color);
+}
+.dashboard:hover {
+    background-color: var(--primary-hover);
+}
+.nav-btn:hover { background-color: #4a5157; }
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+    color: white;
+    background-color: var(--danger-color);
+    margin-top: 20px;
+}
+.logout-btn:hover { background-color: #c82333; }
+
+/* === NEW CLASS: Main Content Area Wrapper === */
+.main-content-wrapper {
+    /* Compensation for fixed sidebar width */
+    margin-left: 250px; 
+    flex-grow: 1; /* Takes up the remaining horizontal space */
+    min-height: 100vh; /* Ensures the wrapper covers the full viewport height */
+}
+/* =========================================== */
+
+/* --- 3. Main Content Area & Search --- */
+.customer-details-container {
+    /* flex-grow: 1; - Removed because wrapper handles flex now */
+    padding: 30px;
+    background-color: var(--bg-light);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.search-section {
+    background-color: var(--bg-white);
+    padding: var(--padding-lg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+}
+
+.search-header {
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.search-header h2 {
+    color: var(--success-color);
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.search-header h2 i {
+    margin-right: 10px;
+}
+
+.search-header p {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-input-group {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#customerSearch {
+    width: 100%;
+    padding: 10px 15px 10px 40px; /* Space for icon */
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#customerSearch:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+    outline: none;
+}
+
+.search-input-group .fas.fa-search {
+    position: absolute;
+    left: 15px;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.search-btn, .clear-btn {
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+.search-btn:hover { background-color: var(--primary-hover); }
+
+.clear-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.clear-btn:hover { background-color: #5a6268; }
+
+/* --- 4. Statistics Cards --- */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: var(--bg-white);
+    padding: var(--padding-md);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-left: 5px solid var(--primary-color);
+    transition: all 0.3s;
+}
+
+.stat-card.negative-value {
+    border-left-color: var(--danger-color);
+}
+.stat-card.positive-value {
+    border-left-color: var(--secondary-color);
+}
+.stat-card.neutral-value {
+    border-left-color: var(--secondary-color);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+}
+
+.stat-card.negative-value .stat-icon {
+    color: var(--danger-color);
+}
+.stat-card.positive-value .stat-icon {
+    color: var(--success-color);
+}
+
+.stat-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-info h3 {
+    font-size: 1.25rem;
+    margin: 0;
+    color: var(--text-dark);
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.stat-info p {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    margin: 0;
+}
+
+/* --- 5. Customer Table --- */
+.customer-table-section {
+    background-color: var(--bg-white);
+    padding: var(--padding-lg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    overflow-x: auto;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.table-header h3 {
+    font-size: 1.3rem;
+    color: var(--text-dark);
+}
+
+.table-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    background-color: var(--success-color);
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.action-btn:hover { background-color: #1d8e37; }
+
+
+
+.export-btn {
+    background-color: var(--success-color);
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.export-btn:hover { background-color: #1d8e37; }
+
+
+
+.refresh-btn {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.refresh-btn:hover { background-color: #c82333; }
+
+.table-container {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+#customerTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px; /* Ensure horizontal scroll on small screens */
+}
+
+#customerTable th,
+#customerTable td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+#customerTable th {
+    background-color: var(--purple-color);
+    font-weight: 700;
+    color: var(--bg-white);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+#customerTable tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* Custom Column Styles */
+#customerTable th:nth-child(1), #customerTable td:nth-child(1) { width: 15%; } /* Customer Name */
+#customerTable th:nth-child(2), #customerTable td:nth-child(2) { width: 8%; } /* Phone */
+#customerTable th:nth-child(3), #customerTable td:nth-child(3) { width: 15%; } /* Address */
+#customerTable th:nth-child(4), #customerTable td:nth-child(4) { width: 5%; text-align: center; } /* Total Invoices */
+#customerTable th:nth-child(5), #customerTable td:nth-child(5) { width: 15%; } /* Invoice No */
+#customerTable th:nth-child(11), #customerTable td:nth-child(11) { width: 15%; } /* WhatsApp */
+
+/* --- Table Content Styling --- */
+.customer-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.customer-name i {
+    color: var(--primary-color);
+}
+
+.customer-return-badge {
+    background: #ffc107;
+    border: 1px solid #e0a800;
+    color: var(--text-dark);
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 10px;
+    margin-left: 5px;
+    cursor: help;
+    display: inline-block;
+}
+
+/* Phone Number Toggling */
+.phone-number {
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--secondary-color);
+    transition: color 0.1s;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.phone-number:hover {
+    color: var(--primary-color);
+}
+
+.phone-number.phone-revealed {
+    color: var(--text-dark);
+    font-weight: 600;
+    text-shadow: 0 0 1px rgba(0,0,0,0.1);
+}
+
+/* Horizontal Invoice Numbers */
+.invoice-numbers {
+    position: relative;
+    cursor: pointer;
+}
+
+.invoice-count {
+    color: var(--primary-color);
+    font-weight: 500;
+    padding: 5px 10px;
+    background: rgba(26, 35, 126, 0.1);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.invoice-count:hover {
+    background: rgba(26, 35, 126, 0.2);
+}
+
+.invoice-numbers-list {
+    display: none;
+    position: absolute;
+    bottom: 100%; 
+    left: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-light); /* Changed to use variable */
+    padding: 15px;
+    z-index: 10;
+    min-width: 200px;
+    border: 1px solid var(--border-light); /* Changed to use variable */
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 5px; /* Reduced margin */
+    padding-top: 20px; /* Added top padding to create overlap area */
+    margin-top: -10px; /* Pull the list up to overlap with the trigger */
+}
+
+.invoice-numbers-list.show {
+    display: flex;
+}
+
+/* Removed invisible bridge as we are using click now */
+
+.invoice-number-badge {
+    padding: 6px 10px;
+    background: var(--bg-light); /* Changed to use variable */
+    border-radius: 6px;
+    font-size: 12px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    z-index: 11; /* Ensure badges are above the bridge */
+}
+
+.invoice-number-badge:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+
+/* Amount Color Coding */
+.amount-positive { color: var(--success-color); font-weight: 600; }
+.amount-negative { color: var(--danger-color); font-weight: 600; }
+.amount-neutral { color: var(--secondary-color); font-weight: 600; }
+
+.amount-neutral:not(:has(.amount-negative)) {
+    color: var(--text-dark);
+}
+
+/* WhatsApp Reminder Button */
+.whatsapp-reminder-btn {
+    background-color: #25d366;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.whatsapp-reminder-btn:hover { background-color: #1eaf53; }
+.no-reminder { color: var(--secondary-color); font-size: 0.8rem; }
+
+/* --- 6. Empty State --- */
+.no-customers {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+}
+
+.no-data-icon {
+    font-size: 3rem;
+    color: var(--border-light);
+    margin-bottom: 15px;
+}
+
+/* --- 7. Invoice Popup (on hover) --- */
+.invoice-popup {
+    position: absolute;
+    width: 300px;
+    background-color: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 0;
+    animation: scaleIn 0.15s ease-out;
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.invoice-popup-content {
+    padding: var(--padding-md);
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.popup-header h4 {
+    color: var(--primary-color);
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    cursor: pointer;
+}
+
+.customer-info strong { font-size: 1rem; color: var(--text-dark); display: block; margin-bottom: 5px; }
+.customer-details div { font-size: 0.85rem; color: var(--secondary-color); margin-top: 3px; }
+.phone-display { cursor: pointer; color: var(--primary-hover); font-weight: 500; }
+
+.invoice-details { margin: 15px 0; padding: 10px; background: var(--bg-light); border-radius: 4px; }
+.detail-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin: 3px 0; }
+.detail-row span:first-child { color: var(--secondary-color); }
+.amount-paid { color: var(--success-color); font-weight: 600; }
+.amount-due { color: var(--danger-color); font-weight: 600; }
+.amount-return { color: var(--danger-color); font-weight: 600; }
+
+.products-preview { margin-top: 15px; border-top: 1px dashed var(--border-light); padding-top: 10px; }
+.products-list { margin-top: 5px; font-size: 0.8rem; }
+.product-item { display: flex; justify-content: space-between; color: var(--secondary-color); }
+.products-preview strong { font-size: 0.9rem; }
+.returns-preview { margin-top: 15px; border-top: 1px dashed var(--border-light); padding-top: 10px; }
+
+.popup-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-light); }
+.popup-actions button { font-size: 0.75rem; padding: 6px 10px; flex-grow: 1; }
+
+/* Mini Loading for Popup */
+.loading-spinner-mini {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 5px auto;
+}
+
+/* --- WhatsApp Reminder Modal - FIXED Positioning --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.reminder-modal {
+    background-color: var(--bg-white);
+    padding: var(--padding-lg);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideInUp 0.3s ease;
+    position: relative;
+}
+
+.reminder-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.reminder-modal .modal-header h3 {
+    color: #25d366;
+    font-size: 1.4rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.reminder-modal .close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.reminder-modal .close-modal:hover {
+    background-color: var(--bg-light);
+    color: var(--danger-color);
+}
+
+.reminder-modal .modal-body {
+    margin-bottom: 20px;
+}
+
+.reminder-modal .customer-info {
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-light);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.reminder-modal .customer-info h4 {
+    color: var(--text-dark);
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+}
+
+.reminder-modal .customer-info p {
+    margin: 4px 0;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.reminder-modal .customer-info strong {
+    color: var(--danger-color);
+    font-size: 1.1rem;
+}
+
+.reminder-modal .template-selection,
+.reminder-modal .message-preview,
+.reminder-modal .custom-message {
+    margin-bottom: 20px;
+}
+
+.reminder-modal label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: block;
+    color: var(--text-dark);
+}
+
+.reminder-modal .template-select,
+.reminder-modal .custom-message textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+}
+
+.reminder-modal .template-select:focus,
+.reminder-modal .custom-message textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+.reminder-modal .custom-message textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.reminder-modal .preview-box {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    min-height: 120px;
+    border: 1px solid var(--border-light);
+    line-height: 1.5;
+    overflow-y: auto;
+    max-height: 200px;
+}
+
+.reminder-modal .message-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+    border-top: 1px solid var(--border-light);
+    padding-top: 10px;
+}
+
+.reminder-modal .message-stats .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reminder-modal .message-stats .stat-item span:first-child {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+}
+
+.reminder-modal .message-stats .stat-item span:last-child {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+.reminder-modal .modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    border-top: 1px solid var(--border-light);
+    padding-top: 20px;
+}
+
+.reminder-modal .btn-secondary,
+.reminder-modal .btn-primary {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.reminder-modal .btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.reminder-modal .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.reminder-modal .btn-primary {
+    background-color: #25d366;
+    color: white;
+}
+
+.reminder-modal .btn-primary:hover {
+    background-color: #1eaf53;
+}
+
+.reminder-modal .btn-primary:disabled,
+.reminder-modal .btn-secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Button Processing State */
+.btn-processing {
+    background-color: var(--secondary-color) !important;
+    pointer-events: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design for Modal */
+@media (max-width: 768px) {
+    .reminder-modal {
+        margin: 20px;
+        padding: 20px;
+        width: calc(100% - 40px);
+    }
+    
+    .reminder-modal .modal-footer {
+        flex-direction: column;
+    }
+    
+    .reminder-modal .btn-secondary,
+    .reminder-modal .btn-primary {
+        width: 100%;
+    }
+}
+
+/* WhatsApp Brand Colors */
+.whatsapp-brand {
+    color: #25d366;
+}
+
+.whatsapp-bg {
+    background-color: #25d366;
+}
+
+.whatsapp-bg:hover {
+    background-color: #1eaf53;
+}
+
+
+/* --- 9. Loading States (Unified Theme) --- */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.professional-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+.skeleton-loader {
+    background: #f0f0f0;
+    background-image: linear-gradient(to right, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%);
+    background-repeat: no-repeat;
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+}
+
+.skeleton-table-row {
+    height: 18px; 
+    margin: 3px 0;
+}
+
+@keyframes shimmer {
+    0% { background-position: -800px 0; }
+    100% { background-position: 800px 0; }
+}
+
+/* Error State in table */
+#customerTableBody .error-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--danger-color);
+}
+.btn-retry {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* --- 10. Responsive Design for Mobile/Small Screens --- */
+
+/* === NEW: Mobile Header Container (Hidden on Desktop) === */
+#mobileHeader {
+    display: none; /* Hidden by default on desktop */
+    width: 100%;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: var(--padding-md) var(--padding-lg);
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* Fixed position on top for mobile */
+    top: 0;
+    left: 0;
+    z-index: 1010;
+}
+
+#menuToggle {
+    background: none;
+    border: none;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* Utility Class for Desktop-only Elements */
+.desktop-only {
+    display: block;
+}
+
+@media (max-width: 992px) {
+
+    /* Show mobile header and hide desktop header */
+    #mobileHeader {
+        display: flex;
+    }
+    .desktop-only {
+        display: none;
+    }
+    .bill-system-header.desktop-only {
+        display: none; /* Explicitly hide the desktop header */
+    }
+
+    /* === MOBILE MENU SLIDE-IN LOGIC === */
+    .controls {
+        /* Fixed for full-screen slide-in */
+        position: fixed !important; 
+        width: 250px !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1005 !important; /* Above main content, below mobileHeader */
+        
+        /* Start off-screen (left-to-right slide) */
+        transform: translateX(-100%); 
+        transition: transform 0.3s ease-out; 
+        
+        /* Add padding-top to account for fixed mobile header */
+        padding-top: 80px !important; 
+        
+        /* reset for overriding previous mobile styles */
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        background-color: var(--text-dark) !important;
+    }
+    
+    /* Class applied by JavaScript to slide menu in */
+    .controls.menu-open {
+        transform: translateX(0) !important;
+    }
+    /* =================================== */
+    
+    /* Content Wrapper adjustments */
+    .main-content-wrapper {
+        margin-left: 0;
+        /* Push content down to account for the fixed mobile header */
+        padding-top: 70px; 
+    }
+
+    /* Full-width links and column stack for buttons in the menu */
+    .controls > a, .controls > button, .nav-buttons > a, .nav-buttons > button, .nav-buttons {
+        flex-grow: 0 !important; 
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .nav-buttons > a {
+        margin-bottom: 10px !important;
+    }
+
+    .logout-btn {
+        margin-top: 10px !important;
+    }
+
+    /* Controls become top navigation */
+    .container {
+        flex-direction: column;
+    }
+
+    .controls {
+        /* Revert to static flow for mobile */
+        position: static; 
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    /* Remove margin when controls are no longer fixed */
+    .main-content-wrapper {
+        margin-left: 0;
+    }
+
+    .bill-system-header {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    
+    .nav-buttons {
+        flex-direction: row;
+        gap: 10px;
+        flex-grow: 1;
+        justify-content: flex-end;
+        
+        /* New scroll additions for mobile nav */
+        flex-wrap: nowrap; /* CRITICAL: Prevent buttons from wrapping vertically */
+        overflow-x: auto; /* Allow horizontal scrolling if buttons overflow */
+        padding-bottom: 5px; /* Add space for the potential scrollbar */
+        width: 100%;
+        margin-top: 10px;
+    }
+    .nav-btn, .logout-btn {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+        flex-grow: 0;
+        flex-shrink: 0; /* Important for horizontal scrolling */
+    }
+}
+
+@media (max-width: 768px) {
+    .customer-details-container {
+        padding: 15px;
+        gap: 20px;
+    }
+    
+    /* Search */
+    .search-box {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-input-group {
+        width: 100%;
+    }
+    .clear-btn {
+        width: 100%;
+    }
+
+    /* Stats */
+    .stats-cards {
+        gap: 15px;
+        justify-content: stretch;
+    }
+    .stat-card {
+        flex-basis: calc(50% - 7.5px); /* Two columns */
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+    .stat-info h3 {
+        font-size: 1.3rem;
+    }
+
+    /* Table Actions */
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .table-actions {
+        width: 100%;
+        margin-top: 10px;
+        justify-content: space-between;
+    }
+    .action-btn {
+        flex-grow: 1;
+    }
+
+    /* Table (Mandatory Scroll) */
+    #customerTable {
+        min-width: 900px; /* Ensure scrollability */
+    }
+    
+    /* Responsive buttons inside controls */
+    .nav-btn, .logout-btn {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 992px) {
+
+    
+
+/* === UNIFIED DESKTOP NAVIGATION STYLES === */
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dashboard,
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--bg-white);
+    background-color: var(--text-dark);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-weight: 600;
+}
+
+.dashboard {
+    background-color: var(--primary-color); 
+}
+.dashboard:hover { background-color: var(--primary-hover); }
+
+.nav-btn:hover { background-color: #4a5157; }
+/* ========================================= */
+
+/* === FORCE UNIFIED MOBILE MENU STYLES === */
+    .controls {
+        position: fixed !important; 
+        width: 280px !important; /* Slightly wider for better touch targets */
+        height: 100vh !important; /* Full viewport height */
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1005 !important;
+        transform: translateX(-100%) !important; 
+        transition: transform 0.3s ease-out !important; 
+        padding-top: 90px !important; /* Push down to clear mobile header */
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        padding-bottom: 30px !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        background-color: var(--text-dark) !important;
+        overflow-y: auto !important;
+        display: flex !important;
+        align-items: flex-start !important;
+    }
+    
+    .controls.menu-open {
+        transform: translateX(0) !important;
+    }
+
+    .nav-buttons {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 10px !important;
+    }
+
+    .nav-buttons > a, .nav-buttons > button, .controls > a, .controls > button, .button-group > button {
+        width: 100% !important;
+        flex-grow: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        box-sizing: border-box !important;
+        padding: 12px 15px !important; /* Good touch target padding */
+        font-size: 1rem !important;
+    }
+    
+    .button-group {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+        margin-top: 20px !important;
+    }
+    /* ======================================== */
+
+}

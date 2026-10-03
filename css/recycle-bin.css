@@ -1,0 +1,752 @@
+/* --- recycle-bin.css --- */
+
+/* --- GENERAL STYLES AND VARIABLES (Match Application Theme) --- */
+:root {
+    --primary-color: #007bff; /* Blue for branding/primary action */
+    --primary-hover: #0056b3; /* Added for consistency */
+    --secondary-color: #6c757d; /* Gray for secondary elements/neutral */
+    --success-color: #28a745; /* Green for success/restore */
+    --danger-color: #dc3545; /* Red for delete/warning */
+    --info-color: #17a2b8; /* Cyan for info/links */
+    --warning-color: #ffc107; /* Yellow for warnings/processing */
+    --bg-light: #f8f9fa; /* Very light gray background */
+    --bg-white: #ffffff; /* White for content areas */
+    --text-dark: #343a40; /* Dark text */
+    --border-light: #dee2e6; /* Light border color */
+    --shadow-light: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --purple-color: #6f42c1;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* --- MAIN LAYOUT --- */
+.container {
+    display: flex;
+    /* min-height: 100vh; - Removed for fixed layout */
+}
+
+/* --- SIDEBAR (Controls) - NOW FIXED --- */
+.controls {
+    width: 250px;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    
+    /* === FIX: Fixed Position === */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Allows the sidebar content to scroll if it exceeds screen height */
+    z-index: 1000;
+    /* =========================== */
+}
+
+.bill-system-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.brand-name {
+    display: block;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 5px;
+}
+
+.system-name {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--bg-light);
+    letter-spacing: 1px;
+}
+
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dashboard,
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--bg-white);
+    background-color: var(--text-dark);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-weight: 600;
+}
+
+.dashboard {
+    background-color: var(--primary-color);
+}
+.dashboard:hover {
+    background-color: var(--primary-hover);
+}
+.nav-btn:hover { background-color: #4a5157; }
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+    color: white;
+    background-color: var(--danger-color);
+    margin-top: 20px;
+}
+.logout-btn:hover { background-color: #c82333; }
+
+/* === NEW CLASS: Main Content Area Wrapper === */
+.main-content-wrapper {
+    /* Compensation for fixed sidebar width */
+    margin-left: 250px; 
+    flex-grow: 1; /* Takes up the remaining horizontal space */
+    min-height: 100vh; /* Ensures the wrapper covers the full viewport height */
+}
+/* =========================================== */
+
+
+/* --- MAIN CONTENT AREA --- */
+.recycle-bin-container {
+    /* flex-grow: 1; - Removed because wrapper handles flex now */
+    padding: 30px;
+    background-color: var(--bg-light); /* Changed back to bg-light for consistency */
+    position: relative;
+}
+
+/* --- HEADER SECTION --- */
+.recycle-bin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--text-dark); /* Red border for bin */
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-icon {
+    font-size: 2rem;
+    color: var(--danger-color);
+}
+
+.header-text h2 {
+    color: var(--danger-color);
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.header-text p {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    display: flex; /* Added for icon alignment */
+    align-items: center;
+    gap: 8px;
+}
+.btn-danger:hover:not(:disabled) { background-color: #c82333; }
+.btn-danger:disabled {
+    background-color: #f8d7da;
+    color: #ed9b9b;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    display: flex; /* Added for icon alignment */
+    align-items: center;
+    gap: 8px;
+}
+.btn-secondary:hover { background-color: #5a6268; }
+
+/* --- STATISTICS CARDS --- */
+.bin-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    flex: 1 1 200px;
+    background-color: var(--bg-white); /* Changed to white for better contrast/card feel */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    align-items: center;
+    border-left: 5px solid var(--danger-color);
+}
+
+.stat-item .stat-icon {
+    font-size: 1.5rem;
+    color: var(--danger-color);
+    margin-right: 15px;
+}
+
+.stat-item .stat-info h3 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--text-dark);
+}
+
+.stat-item .stat-info p {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    margin: 0;
+}
+
+/* --- ITEMS LIST --- */
+.bin-content {
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--purple-color);
+    border-bottom: 1px solid var(--border-light);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.content-header h3 {
+    font-size: 1.1rem;
+    color: var(--bg-white);
+    margin: 0;
+}
+
+.content-header h3 i {
+    color: var(--bg-white);
+    margin-right: 8px;
+}
+
+.content-filters {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.filter-select, .search-input {
+    padding: 8px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.items-list {
+    padding: 0;
+}
+
+.bin-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.1s;
+}
+
+.bin-item:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.bin-item:hover {
+    background-color: #fffafa; /* Subtle red hover */
+}
+
+.bin-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-info {
+    flex-grow: 1;
+}
+
+.item-info h4 {
+    font-size: 1rem;
+    color: var(--danger-color);
+    margin-bottom: 5px;
+}
+
+.item-info h4 i {
+    color: var(--primary-color);
+    margin-right: 5px;
+}
+
+.item-meta {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    display: flex;
+    gap: 15px;
+}
+
+.item-meta span i {
+    margin-right: 5px;
+}
+
+.item-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-restore, .btn-permanent-delete {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.btn-restore {
+    background-color: var(--success-color); /* Green for recovery */
+    color: white;
+}
+.btn-restore:hover { background-color: #1e7e34; }
+
+.btn-permanent-delete {
+    background-color: var(--danger-color);
+    color: white;
+}
+.btn-permanent-delete:hover { background-color: #c82333; }
+
+/* --- EMPTY STATE --- */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    color: var(--border-light);
+    margin-bottom: 15px;
+}
+
+/* --- MODAL OVERLAYS (Confirmation Dialogs) --- */
+.modal-overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--bg-white);
+    border-radius: 8px;
+    width: 95%; 
+    max-width: 600px; /* Increased from 400px to allow better table viewing */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-header h3 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.modal-header h3 i {
+    margin-right: 8px;
+}
+
+.modal-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-light);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--secondary-color);
+    line-height: 1;
+}
+
+.item-preview {
+    background-color: var(--bg-light);
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+    font-size: 0.95rem;
+}
+
+.warning-message {
+    background-color: #f8d7da;
+    color: var(--danger-color);
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* --- LOADING & SKELETON STYLES (Reused from Invoice History) --- */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.professional-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+.spinner-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.spinner-subtext {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.skeleton-loader {
+    background: #f0f0f0;
+    background-image: linear-gradient(to right, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%);
+    background-repeat: no-repeat;
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+}
+
+.skeleton-item {
+    height: 60px; /* Approximate height of a bin item */
+    margin-bottom: 10px;
+}
+
+@keyframes shimmer {
+    0% { background-position: -800px 0; }
+    100% { background-position: 800px 0; }
+}
+
+/* Toast Notification Styles */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 15px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-weight: 600;
+    z-index: 1500;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.toast-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.toast-error {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.toast-fade-out {
+    opacity: 0;
+}
+
+/* --- 1. RESTORE MODAL SPECIFIC STYLES --- */
+#restoreModal .modal-header h3 {
+    color: var(--success-color); 
+}
+
+#restoreModal .modal-header h3 i {
+    color: var(--success-color);
+}
+
+#confirmRestore {
+    background-color: var(--success-color);
+    color: white;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+#confirmRestore:hover {
+    background-color: #1e7e34; /* Darker green hover */
+}
+
+/* --- 2. DELETE/EMPTY BIN MODAL SPECIFIC STYLES --- */
+#deleteModal .modal-header h3,
+#emptyBinModal .modal-header h3 {
+    color: var(--danger-color);
+}
+
+#deleteModal .modal-header h3 i,
+#emptyBinModal .modal-header h3 i {
+    color: var(--danger-color);
+}
+
+#confirmDelete,
+#confirmEmptyBin {
+    background-color: var(--danger-color);
+    color: white;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+#confirmDelete:hover,
+#confirmEmptyBin:hover {
+    background-color: #c82333; /* Darker red hover */
+}
+
+/* New style for the common btn-primary to ensure it looks right in modals if used */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* The existing warning-message is good, keeping it as-is: */
+.warning-message {
+    background-color: #f8d7da;
+    color: var(--danger-color);
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+
+/* ========================================================== */
+/* --- 10. RESPONSIVE DESIGN FOR MOBILE/SMALL SCREENS --- */
+/* ========================================================== */
+
+
+/* === NEW: Mobile Header Container (Hidden on Desktop) === */
+#mobileHeader {
+    display: none; /* Hidden by default on desktop */
+    width: 100%;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: var(--padding-md) var(--padding-lg);
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* Fixed position on top for mobile */
+    top: 0;
+    left: 0;
+    z-index: 1010;
+}
+
+#menuToggle {
+    background: none;
+    border: none;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* Utility Class for Desktop-only Elements */
+.desktop-only {
+    display: block;
+}
+
+@media (max-width: 992px) {
+    /* --- Main Content Area --- */
+    .recycle-bin-container {
+        padding: 15px;
+    }
+    
+    /* --- Header Stacking --- */
+    .recycle-bin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-bottom: 15px;
+    }
+
+    .header-actions {
+        margin-top: 15px;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .btn-danger, .btn-secondary {
+        flex-grow: 1; /* Make buttons fill the width */
+    }
+
+    /* --- Stats Stacking --- */
+    .bin-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .stat-item {
+        flex-basis: 100%; /* Make stats fill the full width */
+    }
+}
+
+@media (max-width: 600px) {
+    /* --- Item List Adjustments --- */
+    .bin-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .item-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .btn-restore, .btn-permanent-delete {
+        flex-grow: 1;
+        font-size: 0.85rem;
+    }
+    
+    .item-meta {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    /* --- Filters Stacking --- */
+    .content-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .content-filters {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-select, .search-input {
+        width: 100%;
+    }
+}
+
+

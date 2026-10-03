@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Recycle Bin - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/recycle-bin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="purchase.html" class="nav-btn">
+                    <i class="fas fa-shopping-cart"></i> Purchase Bill
+                </a>
+                <a href="purchase-history.html" class="nav-btn">
+                    <i class="fas fa-history"></i> Purchase History
+                </a>
+                <a href="manage-suppliers.html" class="nav-btn">
+                    <i class="fas fa-truck-loading"></i> Add Supplier
+                </a>
+                <a href="supplier-details.html" class="nav-btn">
+                    <i class="fas fa-truck"></i> Supplier Details
+                </a>
+                <a href="purchase-recycle-bin.html" class="dashboard">
+                    <i class="fas fa-trash-restore"></i> Recycle Bin
+                </a>
+            </div>
+        </div>
+        <div class="main-content-wrapper">
+            <div class="recycle-bin-container">
+                <div class="recycle-bin-header">
+                    <div class="header-content">
+                        <div class="header-icon">
+                            <i class="fas fa-trash-restore"></i>
+                        </div>
+                        <div class="header-text">
+                            <h2>Purchase Recycle Bin</h2>
+                            <p>Restore accidentally deleted Purchase Bills or permanently delete them</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button id="emptyBinBtn" class="btn-danger" disabled>
+                            <i class="fas fa-trash"></i> Empty Purchase Recycle Bin
+                        </button>
+                        <button id="refreshBtn" class="btn-secondary">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bin-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-Purchase Bill"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalItems">0</h3>
+                            <p>Total Items</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="oldestItem">-</h3>
+                            <p>Oldest Item</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalPurchase Bills">0</h3>
+                            <p>Purchase Bills</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bin-content">
+                    <div class="content-header">
+                        <h3><i class="fas fa-list"></i> Deleted Items</h3>
+                        <div class="content-filters">
+                            <select id="filterType" class="filter-select">
+                                <option value="all">All Items</option>
+                                <option value="Purchase Bill">Purchase Bills Only</option>
+                            </select>
+                            <input type="text" id="searchBin" placeholder="Search deleted items..." class="search-input">
+                        </div>
+                    </div>
+
+                    <div class="items-list" id="itemsList">
+                        </div>
+
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-icon">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                        <h3>Purchase Recycle Bin is Empty</h3>
+                        <p>Deleted Purchase Bills will appear here for recovery</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <div id="viewModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content view-modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> View Details</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="viewPreview" style="max-height: 400px; overflow-y: auto;">
+                <!-- Content injected via JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="closeViewModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="restoreModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-trash-restore"></i> Restore Item</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to restore this item?</p>
+                <div class="item-preview" id="restorePreview"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelRestore">Cancel</button>
+                <button class="btn-primary" id="confirmRestore">Restore</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Permanent Delete</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>This action cannot be undone. The item will be permanently deleted.</p>
+                <div class="item-preview" id="deletePreview"></div>
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>This action is irreversible!</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelDelete">Cancel</button>
+                <button class="btn-danger" id="confirmDelete">Permanently Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="emptyBinModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Empty Purchase Recycle Bin</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>This will permanently delete all items in the Purchase Recycle Bin. This action cannot be undone.</p>
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>All items will be permanently lost!</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelEmptyBin">Cancel</button>
+                <button class="btn-danger" id="confirmEmptyBin">Empty Purchase Recycle Bin</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/purchase-recycle-bin.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
+
+
+

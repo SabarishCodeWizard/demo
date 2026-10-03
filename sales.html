@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Bill - Billing System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+<link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <button class="btn-logout-mobile" onclick="if(window.firebase){firebase.auth().signOut().then(()=>window.location.href='login.html')}else{window.location.href='login.html'}" aria-label="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="dashboard"><i class="fas fa-home"></i> Dashboard</a><a href="sales.html" class="nav-btn">
+                    <i class="fas fa-file-invoice"></i> Sales Bill
+                </a>
+                <a href="invoice-history.html" class="nav-btn">
+                    <i class="fas fa-history"></i> Sales History
+                </a>
+                <a href="manage-customers.html" class="nav-btn">
+                    <i class="fas fa-user-plus"></i> Add Customer
+                </a>
+                <a href="customer-details.html" class="nav-btn">
+                    <i class="fas fa-users"></i> Customer Details
+                </a>
+                <a href="recycle-bin.html" class="nav-btn">
+                    <i class="fas fa-trash-restore"></i> Recycle Bin
+                </a>
+            </div>
+            <div class="button-group">
+                <button id="generatePDF">
+                    <i class="fas fa-file-invoice"></i> Generate BILL
+                </button>
+                <button id="shareWhatsApp">
+                    <i class="fab fa-whatsapp"></i> Share BILL
+                </button>
+                <button id="saveBill">
+                    <i class="fas fa-save"></i> Save BILL
+                </button>
+                <button id="resetForm">
+                    <i class="fas fa-undo"></i> Reset BILL
+                </button>
+            </div>
+        </div>
+        <div class="main-content-wrapper">
+            <button id="logoutBtn" class="btn-logout-top">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+            <div id="invoice" class="invoice-container">
+                <div class="invoice-header">
+                    <div class="company-details">
+                        <div class="invoice-number-suggestions">
+                            <div class="suggestion-item">
+                                <span class="suggestion-label">Last Invoice:</span>
+                                <span class="suggestion-value" id="lastInvoiceNo">-</span>
+                            </div>
+                            <div class="suggestion-item">
+                                <span class="suggestion-label">Suggested Next:</span>
+                                <span class="suggestion-value" id="nextInvoiceNo">-</span>
+                            </div>
+                            <button id="applySuggestion" class="btn-apply-suggestion">
+                                <i class="fas fa-magic"></i> Apply Suggestion
+                            </button>
+                        </div>
+                    </div>
+                    <div class="invoice-title">
+                        <div class="invoice-number">
+                            <label for="invoiceNo">Invoice No:</label>
+                            <input type="text" id="invoiceNo" placeholder="Enter invoice number">
+                        </div>
+                        <div class="invoice-date">
+                            <label for="invoiceDate">Invoice Date:</label>
+                            <input type="date" id="invoiceDate">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="billing-info">
+                    <div class="bill-to">
+                        <h3>Bill to Party</h3>
+                        <div class="form-group">
+                            <label for="customerPhone">Phone:</label>
+                            <input type="text" id="customerPhone" list="customerList" placeholder="Select or type phone number" autocomplete="off">
+                            <datalist id="customerList"></datalist>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerName">Name:</label>
+                            <input type="text" id="customerName" placeholder="e.g. SLN TEX" readonly class="readonly-field">
+                        </div>
+                        <div class="form-group">
+                            <label for="customerAddress">Address:</label>
+                            <input type="text" id="customerAddress"
+                                placeholder="e.g. 1/1B,EAST Extn,M.S.NAGAR, TIRUPUR-7" readonly class="readonly-field">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="customer-balance-info" id="customerBalanceInfo" style="display: none;">
+                    <div class="balance-summary">
+                        <h3>Customer Account Summary</h3>
+                        <div class="balance-details">
+                            <div class="balance-item">
+                                <span class="balance-label">Total Previous Bills:</span>
+                                <span class="balance-value" id="totalPreviousBills">₹0.00</span>
+                            </div>
+                            <div class="balance-item">
+                                <span class="balance-label">Balance Carried Forward:</span>
+                                <span class="balance-value" id="balanceCarriedForward">₹0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="product-table-container">
+                    <table id="productTable">
+                        <thead>
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Product Description</th>
+                                <th>Qty</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <div class="product-description-container">
+                                        <input type="text" class="product-description">
+                                        <div class="autocomplete-dropdown"></div>
+                                    </div>
+                                </td>
+                                <td><input type="number" class="qty" value="0"></td>
+                                <td><input type="number" class="rate" value="0.00"></td>
+                                <td class="amount">0.00</td>
+                                <td><button class="remove-row">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button id="addRow">Add Product</button>
+                </div>
+
+                <div class="calculation-section">
+                    <div class="payment-calculation">
+                        <div class="payment-row">
+                            <label>Current Bill Subtotal:</label>
+                            <span id="subTotal">0.00</span>
+                        </div>
+                        <div class="payment-row previous-balance-row">
+                            <label>Previous Balance Due:</label>
+                            <span id="previousBalance">0.00</span>
+                        </div>
+                        <div class="payment-row previous-balance-row">
+                            <label>Opening Balance:</label>
+                            <input type="number" id="manualPreviousBalance" value="0" class="payment-input" placeholder="0.00" style="text-align: right;">
+                        </div>
+                        <div class="payment-row previous-balance-row">
+                            <label>Discount Amount:</label>
+                            <input type="number" id="discountAmount" value="0" class="payment-input" placeholder="0.00" style="text-align: right;">
+                        </div>
+                        <div class="payment-row total">
+                            <label>Total Amount Due:</label>
+                            <span id="grandTotal">0.00</span>
+                        </div>
+
+                        <div class="multiple-payments-section">
+                            <h4>Payment Methods</h4>
+
+                            <div class="payment-method-row">
+                                <div class="payment-method-label">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    CASH:
+                                </div>
+                                <input type="number" id="cashPaid" value="0" class="payment-input" placeholder="0.00">
+                            </div>
+
+                            <div class="payment-method-row">
+                                <div class="payment-method-label">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    UPI:
+                                </div>
+                                <input type="number" id="upiPaid" value="0" class="payment-input" placeholder="0.00">
+                            </div>
+
+                            <div class="payment-method-row">
+                                <div class="payment-method-label">
+                                    <i class="fas fa-university"></i>
+                                    ACCOUNT:
+                                </div>
+                                <input type="number" id="accountPaid" value="0" class="payment-input" placeholder="0.00">
+                            </div>
+
+                            <div class="payment-row total-paid">
+                                <label>Total Amount Paid:</label>
+                                <span id="totalAmountPaid">0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="payment-row">
+                            <label>New Balance Due:</label>
+                            <span id="balanceDue">0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/pdf.js"></script>
+    <script src="js/script.js"></script>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+
+</html>
+
+

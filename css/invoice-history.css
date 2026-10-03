@@ -1,0 +1,1667 @@
+/* --- invoice-history.css --- */
+
+/* --- 1. CSS Variables & Global Reset (Unified Theme) --- */
+:root {
+    --primary-color: #007bff; /* Blue for branding/primary action */
+    --primary-hover: #0056b3;
+    --secondary-color: #595f69; /* Gray for secondary elements/neutral */
+    --success-color: #28a745; /* Green for success/add payment */
+    --danger-color: #dc3545; /* Red for delete/warning */
+    --info-color: #17a2b8; /* Cyan for info/edit */
+    --warning-color: #ffc107; /* Yellow for returns/undo */
+    --purple-color: #6f42c1; /* Purple for account/payment method */
+    
+    --bg-light: #f8f9fa; /* Very light gray background */
+    --bg-white: #ffffff; /* White for content areas */
+    --text-dark: #343a40; /* Dark text */
+    --border-light: #dee2e6; /* Light border color */
+    --shadow-light: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    
+    /* Spacing */
+    --padding-sm: 8px;
+    --padding-md: 15px;
+    --padding-lg: 20px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* --- 2. Main Layout and Sidebar (Unified Theme) --- */
+.container {
+    display: flex;
+    /* min-height: 100vh; - Removed for fixed layout */
+}
+
+/* Sidebar Styling - NOW FIXED */
+.controls {
+    width: 250px;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: var(--padding-lg);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    
+    /* === FIX: Fixed Position === */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Allows the sidebar content to scroll if it exceeds screen height */
+    z-index: 1000;
+    /* =========================== */
+}
+
+.bill-system-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.brand-name {
+    display: block;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 5px;
+}
+
+.system-name {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--bg-light);
+    letter-spacing: 1px;
+}
+
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dashboard,
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--bg-white);
+    background-color: var(--text-dark);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-weight: 600;
+}
+
+.dashboard {
+    background-color: var(--primary-color);
+}
+.dashboard:hover {
+    background-color: var(--primary-hover);
+}
+.nav-btn:hover { background-color: #4a5157; }
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px 15px;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+    color: white;
+    background-color: var(--danger-color);
+    margin-top: 20px;
+}
+.logout-btn:hover { background-color: #c82333; }
+
+/* === NEW CLASS: Main Content Area Wrapper === */
+.main-content-wrapper {
+    /* Compensation for fixed sidebar width */
+    margin-left: 250px; 
+    flex-grow: 1; /* Takes up the remaining horizontal space */
+    min-height: 100vh; /* Ensures the wrapper covers the full viewport height */
+}
+/* =========================================== */
+
+/* --- 3. Main Content Area --- */
+.invoice-history-container {
+    /* flex-grow: 1; - Removed because wrapper handles flex now */
+    padding: 30px;
+    background-color: var(--bg-light);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.invoice-history-container h2 {
+    color: var(--text-dark);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    font-size: 2rem;
+}
+
+/* --- 4. Recent Invoices --- */
+.recent-invoices-section h3 {
+    margin-bottom: 15px;
+    color: var(--danger-color);
+    font-size: 1.3rem;
+}
+
+.recent-invoices-list {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px; /* Space for scrollbar */
+}
+
+.recent-invoice-item {
+    flex-shrink: 0;
+    width: 200px;
+    background-color: var(--bg-white);
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: var(--shadow-light);
+    border-left: 4px solid var(--secondary-color);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.recent-invoice-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recent-invoice-item span {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.recent-invoice-item .invoice-number {
+    font-weight: 700;
+    color: var(--danger-color);
+    margin-bottom: 5px;
+}
+
+.recent-invoice-item .invoice-customer {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.recent-invoice-item .invoice-amount {
+    font-weight: 700;
+    color: var(--success-color);
+    margin-top: 5px;
+}
+
+.no-recent-invoices {
+    color: var(--secondary-color);
+    font-style: italic;
+    padding: 10px 0;
+}
+
+/* --- 5. Customer Statement Section --- */
+.customer-statement-section {
+    background-color: var(--bg-white);
+    padding: var(--padding-lg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    border-top: 4px solid var(--secondary-color);
+}
+
+.customer-statement-section h3 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.customer-search {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#customerSearch,
+#supplierSearch {
+    flex-grow: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+#generateCustomerStatement, 
+#generateSupplierStatement,
+.btn-clear {
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+#generateCustomerStatement,
+#generateSupplierStatement {
+    background-color: var(--success-color);
+    color: white;
+}
+#generateCustomerStatement:hover,
+#generateSupplierStatement:hover {
+    background-color: #5b39a3;
+}
+
+.btn-clear {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.btn-clear:hover {
+    background-color: #5a6268;
+}
+
+/* Statement Results Area */
+.customer-statement-results {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-light);
+}
+
+.no-customer-invoices {
+    text-align: center;
+    padding: 40px;
+    color: var(--secondary-color);
+}
+
+.customer-summary h4 {
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+}
+
+.summary-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.summary-stats .stat-item {
+    background-color: var(--bg-light);
+    padding: 15px;
+    border-radius: 6px;
+    flex: 1 1 150px;
+    text-align: center;
+    border: 1px solid var(--border-light);
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-value.amount-negative {
+    color: var(--danger-color); /* For positive balance due */
+}
+.stat-value.amount-positive {
+    color: var(--success-color); /* For negative balance (credit) */
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+.customer-invoices-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.customer-invoice-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fcfcfc;
+    padding: 10px 15px;
+    border-radius: 4px;
+    border-left: 3px solid var(--primary-color);
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.customer-invoice-info {
+    flex-grow: 1;
+    color: var(--text-dark);
+}
+
+.return-badge {
+    background-color: var(--warning-color);
+    color: var(--text-dark);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.statement-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.statement-actions button {
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#downloadCombinedStatement {
+    background-color: var(--info-color);
+    color: white;
+}
+#downloadCombinedStatement:hover {
+    background-color: #138496;
+}
+
+#shareCombinedStatement {
+    background-color: #25d366; /* WhatsApp Green */
+    color: white;
+}
+#shareCombinedStatement:hover {
+    background-color: #1eaf53;
+}
+
+
+/* --- 6. Search Filters --- */
+.search-filters {
+    background-color: var(--bg-white);
+    padding: var(--padding-lg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-grow: 1;
+    min-width: 200px;
+}
+
+.filter-group input[type="text"],
+.filter-group input[type="number"],
+.filter-group input[type="date"] {
+    padding: 10px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.range-separator {
+    color: var(--secondary-color);
+    white-space: nowrap;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-actions button {
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+#searchBtn {
+    background-color: var(--primary-color);
+    color: white;
+}
+#searchBtn:hover {
+    background-color: var(--primary-hover);
+}
+
+#clearFilters {
+    background-color: var(--secondary-color);
+    color: white;
+}
+#clearFilters:hover {
+    background-color: #5a6268;
+}
+
+/* --- 7. Invoices List (Date Grouped) --- */
+.invoices-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.date-group {
+    background-color: var(--bg-white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+}
+
+.date-group-header {
+    background-color: var(--secondary-color);
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-title {
+    font-size: 1.2rem;
+    color: var(--bg-white);
+    margin: 0;
+}
+
+.date-title i {
+    margin-right: 10px;
+}
+
+.invoice-count {
+    font-size: 0.9rem;
+    color: var(--bg-white);
+    font-weight: 600;
+}
+
+.date-invoices-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.invoice-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.1s;
+    gap: 20px;
+}
+
+.invoice-item:last-child {
+    border-bottom: none;
+}
+
+.invoice-item:hover {
+    background-color: #fcfcfc;
+}
+
+.invoice-info {
+    flex: 1 1 50%;
+}
+
+.invoice-info h3 {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    border-left: 3px solid var(--primary-color);
+    padding-left: 10px;
+}
+
+.invoice-info p {
+    margin: 3px 0;
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.invoice-info strong {
+    font-weight: 600;
+    min-width: 150px;
+    display: inline-block;
+}
+
+.invoice-actions-container {
+    flex: 1 1 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.primary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.secondary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.primary-actions button,
+.secondary-actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-edit { background-color: var(--info-color); color: white; }
+.btn-edit:hover { background-color: #138496; }
+
+.btn-payment { background-color: var(--success-color); color: white; }
+.btn-payment:hover { background-color: #1e7e34; }
+
+.btn-return { background-color: var(--warning-color); color: var(--text-dark); }
+.btn-return:hover { background-color: #e0a800; }
+
+.btn-statement { background-color: var(--primary-color); color: white; }
+.btn-statement:hover { background-color: var(--primary-hover); }
+
+.btn-share { background-color: #25d366; color: white; }
+.btn-share:hover { background-color: #1eaf53; }
+
+.btn-payment-history, .btn-return-status {
+    background-color: #f0f0f0;
+    color: var(--text-dark);
+    border: 1px solid var(--border-light);
+    font-size: 0.8rem;
+}
+.btn-payment-history:hover, .btn-return-status:hover {
+    background-color: #e2e6ea;
+}
+
+.btn-delete { background-color: var(--danger-color); color: white; }
+.btn-delete:hover { background-color: #c82333; }
+
+.payment-method-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 5px;
+}
+.payment-method-cash { background-color: #28a745; color: white; }
+.payment-method-upi { background-color: #007bff; color: white; }
+.payment-method-account { background-color: #6f42c1; color: white; }
+
+.no-invoices {
+    text-align: center;
+    padding: 50px;
+    color: var(--secondary-color);
+}
+
+/* --- 8. Dialogs (Payment, Return, Delete, History) --- */
+
+/* General Dialog Overlay */
+.payment-dialog-overlay,
+.return-dialog-overlay,
+.payment-history-overlay,
+.return-status-overlay,
+.delete-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+}
+
+/* --- Return Dialog Fix: Set max height and make content scrollable --- */
+.payment-dialog,
+.return-dialog,
+.payment-history-dialog,
+.return-status-dialog,
+.delete-dialog {
+    background-color: var(--bg-white);
+    padding: var(--padding-lg);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 550px;
+    animation: fadeIn 0.3s ease;
+}
+
+.return-dialog {
+    /* Set a max height so it fits the screen vertically */
+    max-height: 90vh; 
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-white);
+    padding: var(--padding-lg);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 550px;
+    animation: fadeIn 0.3s ease;
+}
+
+/* ⬅️ PAYMENT HISTORY MODAL FIX (image_74f264.png) */
+.payment-history-dialog {
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+.payment-history-content {
+    flex-grow: 1; /* Allow content to fill vertical space */
+    overflow-y: auto; /* Enable scrollbar for content */
+    padding-right: 5px;
+}
+
+
+/* ⬅️ RETURN STATUS MODAL FIX (image_74f29c.png) */
+.return-status-dialog {
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+.return-status-content {
+    flex-grow: 1; /* Allow content to fill vertical space */
+    overflow-y: auto; /* Enable scrollbar for content */
+    padding-right: 5px;
+}
+/* ------------------------------------------- */
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header for all Dialogs */
+.payment-dialog h3, .return-dialog-header h3, .payment-history-header h3, .return-status-header h3 {
+    color: var(--primary-color);
+    margin: 0;
+    font-size: 1.2rem;
+    flex: 1;
+    word-break: break-word;
+    padding-right: 10px;
+}
+
+.return-form-section {
+    /* Critical: Make the main section containing the products list scrollable */
+    overflow-y: auto;
+    padding-right: 5px; /* space for scrollbar */
+    flex-grow: 1; /* Allow content to take up available vertical space */
+}
+
+.payment-dialog-actions,
+.return-dialog-actions,
+.delete-dialog-actions {
+    /* Fixed at the bottom */
+    flex-shrink: 0; 
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-light);
+}
+
+.btn-confirm, .btn-save-return, .btn-confirm-delete {
+    background-color: var(--success-color);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+.btn-cancel, .btn-cancel-return, .btn-cancel-delete {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+/* Payment & Return Specific Forms */
+.payment-form .form-group label, .return-form-section .form-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.payment-form .form-group input, .return-form-section .form-group input, .return-form-section .form-group select, .return-form-section .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* Return Dialog Specifics */
+.return-dialog-header, .payment-history-header, .return-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    flex-shrink: 0; /* Keep header fixed */
+}
+
+.close-return-dialog, .close-payment-history, .close-return-status {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 5px;
+}
+
+.return-customer-info, .customer-info {
+    background-color: var(--bg-light);
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    flex-shrink: 0; /* Keep info block fixed */
+}
+.return-customer-info h4, .customer-info h4 {
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.return-products-section h4 {
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.btn-add-return-item {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.return-item {
+    border: 1px solid var(--border-light);
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.return-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.btn-remove-return-item {
+    background: none;
+    border: none;
+    color: var(--danger-color);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.return-item-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.return-item-fields .form-group:nth-child(1) { grid-column: span 2; }
+.return-item-fields .form-group:nth-child(5) { grid-column: span 2; }
+
+.return-summary {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-light);
+    flex-shrink: 0; /* Keep summary fixed */
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 0.95rem;
+}
+
+.summary-item.total {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--success-color);
+    border-top: 2px solid var(--border-light);
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+
+/* History Dialog Specifics (List Scrolling) */
+.payments-list, 
+.returns-list {
+    /* These were the original selectors for scrolling, now used inside the new content wrappers */
+    max-height: unset; /* Remove conflicting definition */
+    overflow-y: visible; /* Remove conflicting definition */
+    padding-right: 0;
+    margin-bottom: 0;
+}
+
+
+.payment-record, .return-record {
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fcfcfc;
+}
+
+.payment-record-header, .return-record-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--border-light);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.payment-record-header strong, .return-record-header strong { color: var(--primary-color); }
+.payment-date, .return-date { color: var(--secondary-color); font-size: 0.85rem; }
+
+.payment-details p, .return-details p {
+    font-size: 0.85rem;
+    margin: 4px 0;
+}
+
+.payment-actions, .return-actions {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.btn-undo-payment, .btn-undo-return {
+    background-color: var(--warning-color);
+    color: var(--text-dark);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.payment-total, .return-total {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 2px solid var(--primary-color);
+    text-align: right;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.bulk-actions {
+    margin-top: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.btn-undo-all-payments, .btn-undo-all-returns {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Delete Dialog Specifics */
+.delete-dialog-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: none;
+    padding-bottom: 10px;
+}
+
+.delete-icon {
+    font-size: 3rem;
+    color: var(--danger-color);
+    margin-bottom: 10px;
+}
+
+.delete-dialog-content {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.delete-warning-text {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+.delete-consequences {
+    list-style: none;
+    padding: 10px 20px;
+    text-align: left;
+    background-color: #fffafa;
+    border: 1px solid #f8d7da;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.delete-consequences li {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: var(--danger-color);
+}
+
+.delete-consequences li i {
+    margin-right: 10px;
+    color: #f5c6cb;
+}
+
+.delete-final-warning {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.confirmation-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+#confirmInvoiceNo {
+    padding: 10px;
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+}
+
+/* Delete Button States */
+.btn-confirm-delete:disabled {
+    background-color: #f8d7da;
+    color: #ed9b9b;
+    cursor: not-allowed;
+}
+.btn-confirm-delete:not(:disabled) {
+    background-color: var(--danger-color);
+}
+
+/* --- 9. Loading and Toast Messages --- */
+
+/* Professional Spinner (from JS) */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.professional-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+.spinner-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.spinner-subtext {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Skeleton Loader */
+.skeleton-loader {
+    background: #f0f0f0;
+    background-image: linear-gradient(to right, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%);
+    background-repeat: no-repeat;
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 8px;
+    height: 100px;
+    margin-bottom: 15px;
+}
+
+@keyframes shimmer {
+    0% { background-position: -800px 0; }
+    100% { background-position: 800px 0; }
+}
+
+/* Toast Messages */
+.operation-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 15px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-weight: 600;
+    z-index: 1500;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    animation: slideInUp 0.3s ease;
+}
+
+.toast-success {
+    background-color: var(--success-color);
+}
+
+.toast-error {
+    background-color: var(--danger-color);
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* --- 10. Responsive Design for Mobile/Small Screens --- */
+
+/* === NEW: Mobile Header Container (Hidden on Desktop) === */
+#mobileHeader {
+    display: none; /* Hidden by default on desktop */
+    width: 100%;
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+    padding: var(--padding-md) var(--padding-lg);
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* Fixed position on top for mobile */
+    top: 0;
+    left: 0;
+    z-index: 1010;
+}
+
+#menuToggle {
+    background: none;
+    border: none;
+    color: var(--bg-white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* Utility Class for Desktop-only Elements */
+.desktop-only {
+    display: block;
+}
+
+@media (max-width: 992px) {
+
+    /* Show mobile header and hide desktop header */
+    #mobileHeader {
+        display: flex;
+    }
+    .desktop-only {
+        display: none;
+    }
+    .bill-system-header.desktop-only {
+        display: none; /* Explicitly hide the desktop header */
+    }
+
+    /* === MOBILE MENU SLIDE-IN LOGIC === */
+    .controls {
+        /* Fixed for full-screen slide-in */
+        position: fixed !important; 
+        width: 250px !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1005 !important; /* Above main content, below mobileHeader */
+        
+        /* Start off-screen (left-to-right slide) */
+        transform: translateX(-100%); 
+        transition: transform 0.3s ease-out; 
+        
+        /* Add padding-top to account for fixed mobile header */
+        padding-top: 80px !important; 
+        
+        /* reset for overriding previous mobile styles */
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        background-color: var(--text-dark) !important;
+    }
+    
+    /* Class applied by JavaScript to slide menu in */
+    .controls.menu-open {
+        transform: translateX(0) !important;
+    }
+    /* =================================== */
+    
+    /* Content Wrapper adjustments */
+    .main-content-wrapper {
+        margin-left: 0;
+        /* Push content down to account for the fixed mobile header */
+        padding-top: 70px; 
+    }
+
+    /* Full-width links and column stack for buttons in the menu */
+    .controls > a, .controls > button, .nav-buttons > a, .nav-buttons > button, .nav-buttons {
+        flex-grow: 0 !important; 
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .nav-buttons > a {
+        margin-bottom: 10px !important;
+    }
+
+    .logout-btn {
+        margin-top: 10px !important;
+    }
+
+    /* Main Layout: Sidebar becomes a top bar */
+    .container {
+        flex-direction: column;
+    }
+
+    .controls {
+        /* Revert to static flow for mobile */
+        position: static; 
+        width: 100%;
+        height: auto;
+        /* Updated: Ensure space between header and buttons */
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    /* Remove margin when controls are no longer fixed */
+    .main-content-wrapper {
+        margin-left: 0;
+    }
+
+    .bill-system-header {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+        /* New: Ensure header takes full width when buttons wrap */
+        flex-basis: 100%; 
+        text-align: left;
+    }
+    
+    /* New: For screens below 992px, make the buttons area scrollable if needed */
+    .navigation-buttons {
+        flex-direction: row;
+        width: 100%; /* Take full width to manage buttons */
+        overflow-x: auto; /* Allow horizontal scrolling if buttons are too wide */
+        padding-bottom: 5px; /* Space for potential scrollbar */
+        flex-wrap: nowrap; /* Prevent vertical wrapping of buttons */
+    }
+
+    /* Existing styles for the rest of the layout */
+    .invoice-history-container {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .invoice-history-container {
+        padding: 15px;
+        gap: 20px;
+    }
+    
+    .recent-invoices-list {
+        flex-wrap: nowrap;
+    }
+
+    /* Filters Stack Vertically */
+    .search-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .filter-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* Customer Search Stack */
+    .customer-search {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #customerSearch, #generateCustomerStatement, .btn-clear {
+        width: 100%;
+    }
+
+    /* Invoice Item Collapse */
+    .invoice-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .invoice-actions-container {
+        align-items: stretch;
+    }
+
+    .primary-actions, .secondary-actions {
+        justify-content: space-around;
+    }
+    
+    .primary-actions button, .secondary-actions button {
+        flex-grow: 1;
+        min-width: 45%;
+    }
+    
+    /* Return Dialog Collapse */
+    .return-item-fields {
+        grid-template-columns: 1fr;
+    }
+    .return-item-fields .form-group:nth-child(1) { grid-column: span 1; }
+    .return-item-fields .form-group:nth-child(5) { grid-column: span 1; }
+    
+    /* Summary Stats Stack */
+    .summary-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .summary-stats .stat-item {
+        flex-basis: 100%;
+    }
+
+    .statement-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* History and Status Dialogs - Ensure Scrollability on Mobile */
+    .payments-list, 
+    .returns-list,
+    .payment-history-content .payments-list,
+    .return-status-content .returns-list {
+        max-height: 300px; /* Reduced max-height for smaller screens */
+    }
+    
+    /* Update: Reduce button padding slightly for small screens */
+    .view-history-btn, #logoutBtn {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ... existing CSS up to Section 9 ... */
+
+/* --- 9. Loading and Toast Messages --- */
+
+/* Professional Spinner (from JS) */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.professional-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+.spinner-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.spinner-subtext {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-top: 5px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Skeleton Loader BASE */
+.skeleton-loader {
+    /* Base for the shimmer effect */
+    background: #f0f0f0;
+    background-image: linear-gradient(to right, #f0f0f0 0%, #e0e0e0 20%, #f0f0f0 40%);
+    background-repeat: no-repeat;
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+@keyframes shimmer {
+    0% { background-position: -800px 0; }
+    100% { background-position: 800px 0; }
+}
+
+/* Specific Skeleton Styles (mimicking element shapes) */
+.skeleton-invoice-item {
+    height: 150px; /* For the main invoice list items */
+}
+
+/* NEW: For recent invoices (horizontal cards) */
+.skeleton-recent-item {
+    height: 70px;
+    width: 200px;
+    flex-shrink: 0;
+    display: inline-block; /* Allows horizontal alignment */
+}
+
+/* NEW: For customer statement summary stats */
+.skeleton-summary-stats {
+    height: 70px;
+    margin-bottom: 25px;
+}
+
+/* NEW: For customer statement invoice list items */
+.skeleton-customer-invoice {
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+/* Toast Messages */
+.operation-toast {
+/* ... existing toast CSS ... */
+}
+
+
+/* Scroll to Top Button */
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-to-top-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
+}
+
+.scroll-to-top-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .scroll-to-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .scroll-to-top-btn {
+        bottom: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 992px) {
+
+    
+
+/* === UNIFIED DESKTOP NAVIGATION STYLES === */
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dashboard,
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--bg-white);
+    background-color: var(--text-dark);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-weight: 600;
+}
+
+.dashboard {
+    background-color: var(--primary-color); 
+}
+.dashboard:hover { background-color: var(--primary-hover); }
+
+.nav-btn:hover { background-color: #4a5157; }
+/* ========================================= */
+
+/* === FORCE UNIFIED MOBILE MENU STYLES === */
+    .controls {
+        position: fixed !important; 
+        width: 280px !important; /* Slightly wider for better touch targets */
+        height: 100vh !important; /* Full viewport height */
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1005 !important;
+        transform: translateX(-100%) !important; 
+        transition: transform 0.3s ease-out !important; 
+        padding-top: 90px !important; /* Push down to clear mobile header */
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        padding-bottom: 30px !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        background-color: var(--text-dark) !important;
+        overflow-y: auto !important;
+        display: flex !important;
+        align-items: flex-start !important;
+    }
+    
+    .controls.menu-open {
+        transform: translateX(0) !important;
+    }
+
+    .nav-buttons {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 10px !important;
+    }
+
+    .nav-buttons > a, .nav-buttons > button, .controls > a, .controls > button, .button-group > button {
+        width: 100% !important;
+        flex-grow: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        box-sizing: border-box !important;
+        padding: 12px 15px !important; /* Good touch target padding */
+        font-size: 1rem !important;
+    }
+    
+    .button-group {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+        margin-top: 20px !important;
+    }
+    /* ======================================== */
+
+}
+
+
+/* Stocks Table Styles */
+table th {
+    background-color: var(--primary-color, #007bff);
+    color: var(--bg-white, #ffffff);
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+}
+
+table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-light, #eee);
+}
+
+#stocksTable {
+    width: 100%;
+    border-collapse: collapse;
+}

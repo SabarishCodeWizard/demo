@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales History - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/invoice-history.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="css/sidebar.css">
+<link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="sales.html" class="nav-btn"><i class="fas fa-file-invoice"></i> Sales Bill</a>
+                <a href="invoice-history.html" class="dashboard">
+                    <i class="fas fa-history"></i> Sales History
+                </a>
+                <a href="manage-customers.html" class="nav-btn">
+                    <i class="fas fa-user-plus"></i> Add Customer
+                </a>
+                <a href="customer-details.html" class="nav-btn">
+                    <i class="fas fa-users"></i> Customer Details
+                </a>
+                <a href="recycle-bin.html" class="nav-btn">
+                    <i class="fas fa-trash-restore"></i> Recycle Bin
+                </a>
+            </div>
+        </div>
+        <div class="main-content-wrapper">
+            <div class="invoice-history-container">
+                <h2>Sales History</h2>
+
+                <div class="recent-invoices-section">
+                    <h3>Recent Invoices</h3>
+                    <div class="recent-invoices-list" id="recentInvoicesList">
+                        </div>
+                </div>
+
+                <div class="customer-statement-section">
+                    <h3>Customer Statement</h3>
+                    <div class="customer-search">
+                        <input type="text" id="customerSearch"
+                            placeholder="Enter customer name to generate combined statement">
+                        <button id="generateCustomerStatement">Generate Combined Statement</button>
+                        <button id="clearCustomerStatement" class="btn-clear">Clear</button>
+                    </div>
+                    <div id="customerStatementResults" class="customer-statement-results">
+                        </div>
+                </div>
+
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <input type="text" id="searchInput" placeholder="Search by customer name or invoice number">
+                    </div>
+                    <div class="filter-group">
+                        <input type="number" id="fromInvoiceNo" placeholder="From Invoice No" min="1">
+                        <span class="range-separator">to</span>
+                        <input type="number" id="toInvoiceNo" placeholder="To Invoice No" min="1">
+                    </div>
+                    <div class="filter-group">
+                        <input type="date" id="fromDate" placeholder="From Date">
+                        <span class="range-separator">to</span>
+                        <input type="date" id="toDate" placeholder="To Date">
+                    </div>
+                    <div class="filter-actions">
+                        <button id="searchBtn">Search</button>
+                        <button id="clearFilters">Clear Filters</button>
+                    </div>
+                </div>
+
+                <div class="invoices-list" id="invoicesList">
+                    </div>
+            </div>
+        </div>
+        </div>
+<!-- Scroll to Top Button -->
+<button id="scrollToTopBtn" class="scroll-to-top-btn" title="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+</button>
+    <script src="js/db.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/pdf.js"></script>
+    <script src="js/invoice-history.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+
+</html>
+
+

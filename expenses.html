@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Expenses - Santhamani Textiles</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/invoice-history.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/expenses.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- SweetAlert2 for nice popups -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <div class="main"></div>
+    <div class="container">
+        <!-- Mobile Header -->
+        <div id="mobileHeader">
+            <button id="menuToggle" aria-label="Toggle Menu"><i class="fas fa-bars"></i></button>
+        </div>
+        
+        <div class="controls" id="menuPanel">
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="overview.html" class="nav-btn"><i class="fas fa-chart-pie"></i> Overview</a>
+                <a href="revenue.html" class="nav-btn"><i class="fas fa-chart-line"></i> Revenue Tracking</a>
+                <a href="shortcut.html" class="nav-btn"><i class="fas fa-bolt"></i> Product Shortcuts</a>
+                <a href="stocks.html" class="nav-btn"><i class="fas fa-boxes"></i> Available Stocks</a>
+                <a href="expenses.html" class="nav-btn active"><i class="fas fa-money-bill-wave"></i> Other Expenses</a>
+            </div>
+        </div>
+
+        <div class="main-content-wrapper">
+            <button id="logoutBtn" class="btn-logout-top">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+            
+            <div class="expenses-layout">
+                <!-- Left Side: Form -->
+                <div class="expenses-left">
+                    <div class="expense-form-container">
+                        <h3 id="formTitle">Add Expense</h3>
+                        <input type="hidden" id="expenseId">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="expenseDate" class="payment-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Amount (Rs.)</label>
+                            <input type="number" id="expenseAmount" class="payment-input" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Reason</label>
+                            <textarea id="expenseReason" class="payment-input" rows="3" placeholder="Description of expense..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button id="saveExpenseBtn" class="btn-action"><i class="fas fa-save"></i> Save</button>
+                            <button id="cancelEditBtn" class="btn-danger" style="display: none;"><i class="fas fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Side: Table -->
+                <div class="expenses-right">
+                    <div class="invoice-history-container" style="margin-top: 20px;">
+                        <h2>Expenses Log</h2>
+                        
+                        <div class="search-filters" style="margin-top: 20px;">
+                            <div class="filter-group" style="display: flex; gap: 10px;">
+                                <input type="date" id="searchDateInput" class="payment-input" title="Search by Date">
+                                <input type="text" id="searchReasonInput" class="payment-input" title="Search by Reason" placeholder="Search by Reason...">
+                                <button id="clearSearchBtn" class="btn-danger" style="padding: 10px 15px;"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table id="expensesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Reason</th>
+                                        <th>Amount (Rs.)</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expensesList">
+                                    <tr><td colspan="4" style="text-align: center;">Loading expenses...</td></tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <td colspan="2" style="text-align: right; font-weight: bold; font-size: 1.0em; color: #333;" id="dayTotalLabel">Day Total:</td>
+                                        <td colspan="2" id="dayTotalAmount" style="font-weight: bold; font-size: 1.0em; color: #0275d8;">Rs. 0.00</td>
+                                    </tr>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <td colspan="2" style="text-align: right; font-weight: bold; font-size: 1.0em; color: #333;" id="monthTotalLabel">Month Total:</td>
+                                        <td colspan="2" id="monthTotalAmount" style="font-weight: bold; font-size: 1.0em; color: #5cb85c;">Rs. 0.00</td>
+                                    </tr>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <td colspan="2" style="text-align: right; font-weight: bold; font-size: 1.1em; color: #333;">Overall Total:</td>
+                                        <td colspan="2" id="totalExpensesAmount" style="font-weight: bold; font-size: 1.1em; color: #d9534f;">Rs. 0.00</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <!-- Utils and DB -->
+    <script src="js/utils.js"></script>
+    <script src="js/db.js"></script>
+    
+    <!-- Expenses specific script -->
+    <script src="js/expenses.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
+
+
